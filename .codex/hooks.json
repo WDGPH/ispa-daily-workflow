@@ -1,0 +1,16 @@
+{
+  "hooks": {
+    "Stop": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "uv run python .codex/hooks/stop_quality_checks.py",
+            "statusMessage": "Running repo quality checks"
+          }
+        ]
+      }
+    ]
+  }
+}

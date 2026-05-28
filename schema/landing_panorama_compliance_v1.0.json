@@ -1,0 +1,169 @@
+{
+  "$schema": "https://datapackage.org/profiles/2.0/tableschema.json",
+  "name": "landing_panorama_compliance",
+  "title": "Panorama Compliance Export (Landing)",
+  "description": "Raw Panorama compliance export as delivered. Headers are strict and must match exactly.",
+  "missingValues": [
+    ""
+  ],
+  "fields": [
+    {
+      "name": "Client ID",
+      "type": "string",
+      "description": "Panorama client identifier.",
+      "constraints": {
+        "required": true
+      }
+    },
+    {
+      "name": "School/ Daycare",
+      "type": "string",
+      "description": "School or daycare name from Panorama.",
+      "constraints": {
+        "required": true
+      }
+    },
+    {
+      "name": "School/ Daycare ID",
+      "type": "string",
+      "description": "School or daycare identifier from Panorama.",
+      "constraints": {
+        "required": true
+      }
+    },
+    {
+      "name": "Last Name",
+      "type": "string",
+      "description": "Student last name.",
+      "constraints": {
+        "required": true
+      }
+    },
+    {
+      "name": "First Name",
+      "type": "string",
+      "description": "Student first name.",
+      "constraints": {
+        "required": true
+      }
+    },
+    {
+      "name": "Middle Name",
+      "type": "string",
+      "description": "Student middle name."
+    },
+    {
+      "name": "Grade",
+      "type": "string",
+      "description": "Student grade."
+    },
+    {
+      "name": "Class",
+      "type": "string",
+      "description": "Student class or homeroom."
+    },
+    {
+      "name": "Date of Birth",
+      "type": "date",
+      "description": "Student date of birth as provided by Panorama.",
+      "constraints": {
+        "required": true
+      }
+    },
+    {
+      "name": "Age < 16",
+      "type": "boolean",
+      "description": "Age under 16 flag as provided by Panorama."
+    },
+    {
+      "name": "Gender",
+      "type": "string",
+      "description": "Student gender."
+    },
+    {
+      "name": "Phone Number",
+      "type": "string",
+      "description": "Primary phone number."
+    },
+    {
+      "name": "Street Address",
+      "type": "string",
+      "description": "Street address."
+    },
+    {
+      "name": "City",
+      "type": "string",
+      "description": "City."
+    },
+    {
+      "name": "Province",
+      "type": "string",
+      "description": "Province."
+    },
+    {
+      "name": "Postal Code",
+      "type": "string",
+      "description": "Postal code."
+    },
+    {
+      "name": "Guardian 1 First Name",
+      "type": "string",
+      "description": "Guardian 1 first name."
+    },
+    {
+      "name": "Guardian 1 Last Name",
+      "type": "string",
+      "description": "Guardian 1 last name."
+    },
+    {
+      "name": "Guardian 1 Phone",
+      "type": "string",
+      "description": "Guardian 1 phone number."
+    },
+    {
+      "name": "Guardian 2 First Name",
+      "type": "string",
+      "description": "Guardian 2 first name."
+    },
+    {
+      "name": "Guardian 2 Last Name",
+      "type": "string",
+      "description": "Guardian 2 last name."
+    },
+    {
+      "name": "Guardian 2 Phone",
+      "type": "string",
+      "description": "Guardian 2 phone number."
+    },
+    {
+      "name": "Disease(s)/Agent(s)",
+      "type": "string",
+      "description": "Reported diseases or agents."
+    },
+    {
+      "name": "Imms History by Agent",
+      "type": "string",
+      "description": "Immunization history by agent."
+    },
+    {
+      "name": "Imms History by Disease",
+      "type": "string",
+      "description": "Immunization history by disease."
+    },
+    {
+      "name": "Meningococcal Disease",
+      "type": "string",
+      "description": "Meningococcal disease status."
+    },
+    {
+      "name": "Ontario Immunization ID",
+      "type": "string",
+      "description": "Ontario immunization ID."
+    },
+    {
+      "name": "School Board",
+      "type": "string",
+      "description": "School board."
+    }
+  ]
+}

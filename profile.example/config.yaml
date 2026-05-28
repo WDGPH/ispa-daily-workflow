@@ -1,0 +1,77 @@
+# Complete example root config wired to a profile submodule.
+# Copy values into repo-root config.yaml and replace placeholders.
+
+run:
+  timezone: "America/Toronto"
+  workdays_csv: "profile/workdays.csv"
+  school_year_start_month: 9
+
+paths:
+  input_root: "input"
+  input_raw: "input/raw"
+  input_renamed: "input/renamed"
+  output_root: "output"
+  artifacts_root: "artifacts"
+  logs_root: "logs"
+  reference: "profile/school_reference.json"
+
+validation:
+  schemas: "schema"
+  strict_headers: true
+
+io:
+  # Adapter selectors are optional. Defaults preserve current deployment behavior:
+  # SharePoint for source/publish IO and ADLS for authoritative state.
+  input_provider:
+    kind: "sharepoint"
+  state_store:
+    kind: "adls"
+  output_publisher:
+    kind: "sharepoint"
+
+  adls:
+    secrets_path: "/mnt/secrets-store/adls"
+    secret_files:
+      tenant_id: "example-adls-tenant-id"
+      client_id: "example-adls-client-id"
+      client_secret: "example-adls-client-secret"
+      storage_account: "example-adls-storage-account"
+      container: "example-adls-container"
+    destinations:
+      landing_prefix: "Landing/refactor_panorama_compliance"
+      processed_prefix: "Processed/refactor_panorama_compliance"
+      pear_landing_prefix: "Landing/refactor_pear_compliance"
+      pear_processed_prefix: "Processed/refactor_pear_compliance"
+
+  sharepoint:
+    secrets_path: "/mnt/secrets-store/sharepoint"
+    secret_files:
+      tenant_id: "example-sharepoint-tenant-id"
+      client_id: "example-sharepoint-client-id"
+      client_secret: "example-sharepoint-client-secret"
+    inputs:
+      panorama_overdue: "https://example.sharepoint.com/sites/Example/Shared%20Documents/ISPA/Overdue"
+      pear_overdue: "https://example.sharepoint.com/sites/Example/Shared%20Documents/ISPA/PEAR/Overdue"
+      pear_suspension_vs_overdue: "https://example.sharepoint.com/sites/Example/Shared%20Documents/ISPA/PEAR/Suspension%20Vs%20Overdue"
+      pear_suspension: "https://example.sharepoint.com/sites/Example/Shared%20Documents/ISPA/PEAR/Suspension"
+    outputs:
+      list_difference: "https://example.sharepoint.com/sites/Example/Shared%20Documents/ISPA/List%20Difference"
+      action_queue: "https://example.sharepoint.com/sites/Example/Shared%20Documents/ISPA/Action%20Queue"
+      pdf:
+        elementary_root: "https://example.sharepoint.com/sites/Example/Shared%20Documents/ISPA/PDF/Elementary"
+        secondary_root: "https://example.sharepoint.com/sites/Example/Shared%20Documents/ISPA/PDF/Secondary"
+
+outputs:
+  pdf:
+    logo: "profile/logo.pdf"
+    typst_bin: "typst"
+
+alerts:
+  missing_input_threshold: 0
+  percent_change_threshold: 0.25
+
+logging:
+  format: "text"
+  level: "INFO"
+  debug_http_requests: false
+  redact_long_numeric_ids: false

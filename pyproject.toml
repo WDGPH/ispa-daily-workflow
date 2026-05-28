@@ -1,0 +1,83 @@
+[project]
+name = "panorama-compliance"
+version = "0.1.0"
+description = "Unified Panorama compliance ingest, diff, reporting, and export pipeline."
+readme = "README.md"
+license = "MIT"
+requires-python = ">=3.10,<3.14"
+dependencies = [
+    "azure-identity>=1.25.1",
+    "azure-storage-file-datalake>=12.23.0",
+    "frictionless>=5.18.1",
+    "openpyxl>=3.1.2",
+    "polars[calamine,deltalake]>=1.36.1",
+    "pyyaml>=6.0.3",
+    "xlsxwriter>=3.2.0",
+    "xlrd>=2.0.1",
+    "msgraph-sdk>=1.54.0",
+    "tqdm>=4.67.3",
+]
+
+[project.scripts]
+update-state = "panorama_compliance.pipeline.update_state:main"
+deliver-outputs = "panorama_compliance.pipeline.deliver_outputs:main"
+
+[tool.uv]
+package = true
+
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[dependency-groups]
+dev = [
+    "prek>=0.3.13",
+    "pytest>=9.0.3",
+    "pytest-cov>=7.1.0",
+    "ruff>=0.15.12",
+    "ty>=0.0.35",
+]
+
+[tool.ruff.lint.per-file-ignores]
+"scripts/**/*.py" = ["E402"]
+"scripts/*.py" = ["E402"]
+"src/panorama_compliance/domain/pear/state/derive.py" = ["E402"]
+"src/panorama_compliance/pipeline/derive_pear_state.py" = ["E402"]
+"src/panorama_compliance/pipeline/intake_pear.py" = ["E402"]
+"src/panorama_compliance/pipeline/ops/*.py" = ["E402"]
+"src/panorama_compliance/pipeline/update_state.py" = ["E402"]
+
+[tool.pytest.ini_options]
+minversion = "9.0"
+testpaths = ["tests"]
+pythonpath = ["src"]
+addopts = [
+    "-ra",
+    "--strict-config",
+    "--strict-markers",
+]
+markers = [
+    "e2e: end-to-end or command-surface tests that exercise multiple pipeline layers",
+    "local_data: requires private/local runtime data and is skipped unless explicitly enabled",
+    "sharepoint_safe: verifies no-upload or dry-run behavior for operator acceptance checks",
+    "validation: validation, schema, guardrail, or evidence behavior",
+]
+
+[tool.coverage.run]
+branch = true
+source = ["panorama_compliance"]
+
+[tool.coverage.report]
+show_missing = true
+skip_empty = true
+exclude_lines = [
+    "pragma: no cover",
+    "if TYPE_CHECKING:",
+    "if __name__ == .__main__.:",
+]
+
+[tool.setuptools]
+package-dir = {"" = "src"}
+
+[tool.setuptools.packages.find]
+where = ["src"]

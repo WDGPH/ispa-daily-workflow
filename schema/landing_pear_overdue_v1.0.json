@@ -1,0 +1,96 @@
+{
+  "$schema": "https://datapackage.org/profiles/2.0/tableschema.json",
+  "name": "landing_pear_overdue",
+  "title": "PEAR Overdue Summary (Landing)",
+  "description": "PEAR overdue rows after top-matter/header detection and footer trimming.",
+  "missingValues": [
+    ""
+  ],
+  "fields": [
+    {
+      "name": "School Type",
+      "type": "string",
+      "description": "Source school-type label from PEAR overdue report."
+    },
+    {
+      "name": "School Name",
+      "type": "string",
+      "description": "School label from PEAR, expected to contain canonical school ID suffix.",
+      "constraints": {
+        "required": true
+      }
+    },
+    {
+      "name": "School City",
+      "type": "string",
+      "description": "Source school city field from PEAR overdue report."
+    },
+    {
+      "name": "School Board Name",
+      "type": "string",
+      "description": "Source school board name from PEAR overdue report."
+    },
+    {
+      "name": "Report Date",
+      "type": "date",
+      "description": "Source report date field provided in PEAR overdue rows."
+    },
+    {
+      "name": "Query Id",
+      "type": "string",
+      "description": "Source PEAR query identifier for overdue export."
+    },
+    {
+      "name": "Query Name",
+      "type": "string",
+      "description": "Source PEAR query name for overdue export."
+    },
+    {
+      "name": "Remaining Overdue",
+      "type": "string",
+      "description": "Client identifier field used as canonical client_id in PEAR overdue processing.",
+      "constraints": {
+        "required": true
+      }
+    },
+    {
+      "name": "Birth Year",
+      "type": "string",
+      "description": "Source birth year text from PEAR overdue report."
+    },
+    {
+      "name": "First Name",
+      "type": "string",
+      "description": "Student first name from PEAR overdue row.",
+      "constraints": {
+        "required": true
+      }
+    },
+    {
+      "name": "Last Name",
+      "type": "string",
+      "description": "Student last name from PEAR overdue row.",
+      "constraints": {
+        "required": true
+      }
+    },
+    {
+      "name": "Date of Birth",
+      "type": "date",
+      "description": "Student date of birth parsed from PEAR date cell.",
+      "constraints": {
+        "required": true
+      }
+    },
+    {
+      "name": "Gender",
+      "type": "string",
+      "description": "Source gender field from PEAR overdue report."
+    },
+    {
+      "name": "Repeater",
+      "type": "string",
+      "description": "Semicolon-delimited overdue disease/agent list from PEAR."
+    }
+  ]
+}

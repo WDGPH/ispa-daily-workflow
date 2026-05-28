@@ -1,0 +1,68 @@
+{
+  "$schema": "https://datapackage.org/profiles/2.0/tableschema.json",
+  "name": "delivery_sharepoint_diff",
+  "title": "SharePoint Diff Delivery Contract",
+  "description": "Delivery-surface contract for Panorama became-compliant outputs (sharepoint.panorama.diff.xlsx).",
+  "missingValues": [
+    ""
+  ],
+  "primaryKey": [
+    "client_id"
+  ],
+  "fields": [
+    {
+      "name": "client_id",
+      "type": "string",
+      "description": "Panorama client identifier.",
+      "constraints": {
+        "required": true
+      }
+    },
+    {
+      "name": "school_id",
+      "type": "string",
+      "description": "School identifier.",
+      "constraints": {
+        "required": true
+      }
+    },
+    {
+      "name": "school_name",
+      "type": "string",
+      "description": "School name.",
+      "constraints": {
+        "required": true
+      }
+    },
+    {
+      "name": "first_name",
+      "type": "string",
+      "description": "Student first name.",
+      "constraints": {
+        "required": true
+      }
+    },
+    {
+      "name": "middle_name",
+      "type": "string",
+      "description": "Student middle name."
+    },
+    {
+      "name": "last_name",
+      "type": "string",
+      "description": "Student last name.",
+      "constraints": {
+        "required": true
+      }
+    },
+    {
+      "name": "date_of_birth",
+      "type": "date",
+      "format": "default",
+      "description": "Student date of birth (YYYY-MM-DD).",
+      "constraints": {
+        "required": true
+      }
+    }
+  ]
+}

@@ -1,0 +1,107 @@
+{
+  "$schema": "https://datapackage.org/profiles/2.0/tableschema.json",
+  "name": "processed_panorama_suspension_compliance_history",
+  "title": "Panorama Suspension Compliance History (Processed)",
+  "description": "Compliance History roster for suspension tracking, initialized from earliest combined output and updated with compliant on drop-off, per wave.",
+  "missingValues": [
+    ""
+  ],
+  "primaryKey": [
+    "client_id"
+  ],
+  "fields": [
+    {
+      "name": "client_id",
+      "type": "string",
+      "description": "Panorama client identifier.",
+      "constraints": {
+        "required": true
+      }
+    },
+    {
+      "name": "school_id",
+      "type": "string",
+      "description": "School identifier.",
+      "constraints": {
+        "required": true
+      }
+    },
+    {
+      "name": "school_name",
+      "type": "string",
+      "description": "School name.",
+      "constraints": {
+        "required": true
+      }
+    },
+    {
+      "name": "first_name",
+      "type": "string",
+      "description": "Student first name.",
+      "constraints": {
+        "required": true
+      }
+    },
+    {
+      "name": "middle_name",
+      "type": "string",
+      "description": "Student middle name."
+    },
+    {
+      "name": "last_name",
+      "type": "string",
+      "description": "Student last name.",
+      "constraints": {
+        "required": true
+      }
+    },
+    {
+      "name": "date_of_birth",
+      "type": "date",
+      "format": "default",
+      "description": "Student date of birth (YYYY-MM-DD).",
+      "constraints": {
+        "required": true
+      }
+    },
+    {
+      "name": "street_address",
+      "type": "string",
+      "description": "Street address."
+    },
+    {
+      "name": "city",
+      "type": "string",
+      "description": "City."
+    },
+    {
+      "name": "province",
+      "type": "string",
+      "description": "Province."
+    },
+    {
+      "name": "postal_code",
+      "type": "string",
+      "description": "Postal code."
+    },
+    {
+      "name": "primary_phone",
+      "type": "string",
+      "description": "Primary phone number."
+    },
+    {
+      "name": "compliant",
+      "type": "date",
+      "format": "default",
+      "description": "Date the student became compliant (null if still on list)."
+    },
+    {
+      "name": "source_file",
+      "type": "string",
+      "description": "Most recent standardized source filename seen for this client_id while noncompliant.",
+      "constraints": {
+        "required": true
+      }
+    }
+  ]
+}
