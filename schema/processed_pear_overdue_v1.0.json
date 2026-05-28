@@ -1,0 +1,67 @@
+{
+  "$schema": "https://datapackage.org/profiles/2.0/tableschema.json",
+  "name": "processed_pear_overdue",
+  "title": "PEAR Overdue Summary (Processed)",
+  "description": "Normalized PEAR overdue rows with canonical identity and school metadata.",
+  "missingValues": [
+    ""
+  ],
+  "primaryKey": [
+    "client_id"
+  ],
+  "fields": [
+    {
+      "name": "client_id",
+      "type": "string",
+      "description": "Canonical 10-digit client identifier from PEAR Remaining Overdue field.",
+      "constraints": {
+        "required": true
+      }
+    },
+    {
+      "name": "school_id",
+      "type": "string",
+      "description": "Canonical school identifier extracted from school_name and resolved via reference.",
+      "constraints": {
+        "required": true
+      }
+    },
+    {
+      "name": "school_name",
+      "type": "string",
+      "description": "Canonical school name from school reference mapping.",
+      "constraints": {
+        "required": true
+      }
+    },
+    {
+      "name": "first_name",
+      "type": "string",
+      "description": "Normalized student first name.",
+      "constraints": {
+        "required": true
+      }
+    },
+    {
+      "name": "last_name",
+      "type": "string",
+      "description": "Normalized student last name.",
+      "constraints": {
+        "required": true
+      }
+    },
+    {
+      "name": "date_of_birth",
+      "type": "date",
+      "description": "Normalized student date of birth.",
+      "constraints": {
+        "required": true
+      }
+    },
+    {
+      "name": "overdue_agents",
+      "type": "string",
+      "description": "Normalized semicolon-delimited overdue disease/agent list from PEAR Repeater."
+    }
+  ]
+}

@@ -1,0 +1,173 @@
+{
+  "$schema": "https://datapackage.org/profiles/2.0/tableschema.json",
+  "name": "processed_panorama_compliance",
+  "title": "Panorama Compliance Export (Processed)",
+  "description": "Landing Panorama compliance export with columns renamed to canonical snake_case.",
+  "missingValues": [
+    ""
+  ],
+  "primaryKey": [
+    "client_id"
+  ],
+  "fields": [
+    {
+      "name": "client_id",
+      "type": "string",
+      "description": "Panorama client identifier.",
+      "constraints": {
+        "required": true
+      }
+    },
+    {
+      "name": "school_name",
+      "type": "string",
+      "description": "School or daycare name from Panorama.",
+      "constraints": {
+        "required": true
+      }
+    },
+    {
+      "name": "school_id",
+      "type": "string",
+      "description": "School or daycare identifier from Panorama.",
+      "constraints": {
+        "required": true
+      }
+    },
+    {
+      "name": "last_name",
+      "type": "string",
+      "description": "Student last name.",
+      "constraints": {
+        "required": true
+      }
+    },
+    {
+      "name": "first_name",
+      "type": "string",
+      "description": "Student first name.",
+      "constraints": {
+        "required": true
+      }
+    },
+    {
+      "name": "middle_name",
+      "type": "string",
+      "description": "Student middle name."
+    },
+    {
+      "name": "grade",
+      "type": "string",
+      "description": "Student grade."
+    },
+    {
+      "name": "class",
+      "type": "string",
+      "description": "Student class or homeroom."
+    },
+    {
+      "name": "date_of_birth",
+      "type": "date",
+      "format": "default",
+      "description": "Student date of birth (YYYY-MM-DD).",
+      "constraints": {
+        "required": true
+      }
+    },
+    {
+      "name": "is_under_16",
+      "type": "boolean",
+      "description": "Age under 16 flag."
+    },
+    {
+      "name": "gender",
+      "type": "string",
+      "description": "Student gender."
+    },
+    {
+      "name": "primary_phone",
+      "type": "string",
+      "description": "Primary phone number."
+    },
+    {
+      "name": "street_address",
+      "type": "string",
+      "description": "Street address."
+    },
+    {
+      "name": "city",
+      "type": "string",
+      "description": "City."
+    },
+    {
+      "name": "province",
+      "type": "string",
+      "description": "Province."
+    },
+    {
+      "name": "postal_code",
+      "type": "string",
+      "description": "Postal code."
+    },
+    {
+      "name": "guardian_1_first_name",
+      "type": "string",
+      "description": "Guardian 1 first name."
+    },
+    {
+      "name": "guardian_1_last_name",
+      "type": "string",
+      "description": "Guardian 1 last name."
+    },
+    {
+      "name": "guardian_1_phone",
+      "type": "string",
+      "description": "Guardian 1 phone number."
+    },
+    {
+      "name": "guardian_2_first_name",
+      "type": "string",
+      "description": "Guardian 2 first name."
+    },
+    {
+      "name": "guardian_2_last_name",
+      "type": "string",
+      "description": "Guardian 2 last name."
+    },
+    {
+      "name": "guardian_2_phone",
+      "type": "string",
+      "description": "Guardian 2 phone number."
+    },
+    {
+      "name": "reported_diseases_agents",
+      "type": "string",
+      "description": "Reported diseases or agents."
+    },
+    {
+      "name": "immunization_history_by_agent",
+      "type": "string",
+      "description": "Immunization history by agent."
+    },
+    {
+      "name": "immunization_history_by_disease",
+      "type": "string",
+      "description": "Immunization history by disease."
+    },
+    {
+      "name": "meningococcal_disease_status",
+      "type": "string",
+      "description": "Meningococcal disease status."
+    },
+    {
+      "name": "ontario_immunization_id",
+      "type": "string",
+      "description": "Ontario immunization ID."
+    },
+    {
+      "name": "school_board",
+      "type": "string",
+      "description": "School board."
+    }
+  ]
+}

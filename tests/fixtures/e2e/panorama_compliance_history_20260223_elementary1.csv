@@ -1,0 +1,4 @@
+client_id,school_id,school_name,first_name,middle_name,last_name,date_of_birth,street_address,city,province,postal_code,primary_phone,compliant,source_file
+0000000001,1001,FICTIONAL ALPHA SCHOOL,Alex,,Active,2014-01-01,1 Test Street,Guelph,ON,N1H0A1,555-0101,,20260223_panorama_compliance_elementary_1001.xlsx
+0000000002,1001,FICTIONAL ALPHA SCHOOL,Briar,,Compliant,2013-02-02,2 Test Street,Guelph,ON,N1H0A2,555-0102,,20260223_panorama_compliance_elementary_1001.xlsx
+0000000003,1001,FICTIONAL ALPHA SCHOOL,Casey,,Historical,2012-03-03,3 Test Street,Guelph,ON,N1H0A3,555-0103,2026-02-20,20260220_panorama_compliance_elementary_1001.xlsx

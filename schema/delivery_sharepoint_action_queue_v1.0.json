@@ -1,0 +1,80 @@
+{
+  "$schema": "https://datapackage.org/profiles/2.0/tableschema.json",
+  "name": "delivery_sharepoint_action_queue",
+  "title": "SharePoint Action Queue Delivery Contract",
+  "description": "Delivery-surface contract for sharepoint.action_queue.xlsx outputs derived from PEAR suspension_vs_overdue state.",
+  "missingValues": [
+    ""
+  ],
+  "primaryKey": [
+    "client_id"
+  ],
+  "fields": [
+    {
+      "name": "client_id",
+      "type": "string",
+      "description": "PEAR client identifier.",
+      "constraints": {
+        "required": true
+      }
+    },
+    {
+      "name": "school_id",
+      "type": "string",
+      "description": "School identifier.",
+      "constraints": {
+        "required": true
+      }
+    },
+    {
+      "name": "school_name",
+      "type": "string",
+      "description": "School name.",
+      "constraints": {
+        "required": true
+      }
+    },
+    {
+      "name": "first_name",
+      "type": "string",
+      "description": "Student first name.",
+      "constraints": {
+        "required": true
+      }
+    },
+    {
+      "name": "last_name",
+      "type": "string",
+      "description": "Student last name.",
+      "constraints": {
+        "required": true
+      }
+    },
+    {
+      "name": "date_of_birth",
+      "type": "date",
+      "format": "default",
+      "description": "Student date of birth (YYYY-MM-DD).",
+      "constraints": {
+        "required": true
+      }
+    },
+    {
+      "name": "action_required",
+      "type": "string",
+      "description": "Required action (`delete` or `rescind`).",
+      "constraints": {
+        "required": true
+      }
+    },
+    {
+      "name": "action_date",
+      "type": "date",
+      "format": "default",
+      "description": "Action date (YYYY-MM-DD).",
+      "constraints": {
+        "required": true
+      }
+    }
+  ]
+}

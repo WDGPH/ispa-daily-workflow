@@ -1,0 +1,18 @@
+{
+  "version": "1.0",
+  "datasets": {
+    "landing.panorama.compliance": "landing_panorama_compliance_v1.0.json",
+    "landing.pear.suspension": "landing_pear_suspension_v1.0.json",
+    "landing.pear.overdue": "landing_pear_overdue_v1.0.json",
+    "landing.pear.suspension_vs_overdue": "landing_pear_suspension_vs_overdue_v1.0.json",
+    "processed.panorama.compliance": "processed_panorama_compliance_v1.0.json",
+    "processed.panorama.noncompliant": "processed_panorama_noncompliant_v1.0.json",
+    "processed.panorama.became_compliant": "processed_panorama_became_compliant_v1.0.json",
+    "processed.panorama.suspension_compliance_history": "processed_panorama_suspension_compliance_history_v2.0.json",
+    "processed.pear.suspension": "processed_pear_suspension_v1.0.json",
+    "processed.pear.overdue": "processed_pear_overdue_v1.0.json",
+    "processed.pear.suspension_vs_overdue": "processed_pear_suspension_vs_overdue_v1.0.json",
+    "delivery.sharepoint.diff": "delivery_sharepoint_diff_v1.0.json",
+    "delivery.sharepoint.action_queue": "delivery_sharepoint_action_queue_v1.0.json"
+  }
+}

@@ -1,0 +1,67 @@
+{
+  "$schema": "https://datapackage.org/profiles/2.0/tableschema.json",
+  "name": "processed_pear_suspension",
+  "title": "PEAR Suspension List (Processed)",
+  "description": "Normalized PEAR suspension rows with canonical school/wave metadata.",
+  "missingValues": [
+    ""
+  ],
+  "primaryKey": [
+    "client_id"
+  ],
+  "fields": [
+    {
+      "name": "client_id",
+      "type": "string",
+      "description": "Canonical 10-digit client identifier preserved as text.",
+      "constraints": {
+        "required": true
+      }
+    },
+    {
+      "name": "school_id",
+      "type": "string",
+      "description": "Canonical school identifier extracted from school_name and resolved via reference.",
+      "constraints": {
+        "required": true
+      }
+    },
+    {
+      "name": "school_name",
+      "type": "string",
+      "description": "Canonical school name from school reference mapping.",
+      "constraints": {
+        "required": true
+      }
+    },
+    {
+      "name": "first_name",
+      "type": "string",
+      "description": "Normalized student first name.",
+      "constraints": {
+        "required": true
+      }
+    },
+    {
+      "name": "last_name",
+      "type": "string",
+      "description": "Normalized student last name.",
+      "constraints": {
+        "required": true
+      }
+    },
+    {
+      "name": "date_of_birth",
+      "type": "date",
+      "description": "Normalized student date of birth.",
+      "constraints": {
+        "required": true
+      }
+    },
+    {
+      "name": "rescind_date",
+      "type": "date",
+      "description": "Normalized rescind date from PEAR suspension source row when present."
+    }
+  ]
+}

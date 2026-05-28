@@ -1,0 +1,58 @@
+{
+  "$schema": "https://datapackage.org/profiles/2.0/tableschema.json",
+  "name": "landing_pear_suspension",
+  "title": "PEAR Suspension List (Landing)",
+  "description": "PEAR suspension list rows after header detection and footer trimming.",
+  "missingValues": [
+    ""
+  ],
+  "fields": [
+    {
+      "name": "School Name",
+      "type": "string",
+      "description": "School label from PEAR, typically including canonical school ID suffix."
+    },
+    {
+      "name": "School Id",
+      "type": "string",
+      "description": "Source school identifier field from PEAR; retained only at landing."
+    },
+    {
+      "name": "Last Name",
+      "type": "string",
+      "description": "Student last name from PEAR report row.",
+      "constraints": {
+        "required": true
+      }
+    },
+    {
+      "name": "First Name",
+      "type": "string",
+      "description": "Student first name from PEAR report row.",
+      "constraints": {
+        "required": true
+      }
+    },
+    {
+      "name": "Date of Birth",
+      "type": "date",
+      "description": "Student date of birth parsed from PEAR date cell.",
+      "constraints": {
+        "required": true
+      }
+    },
+    {
+      "name": "Client Id",
+      "type": "string",
+      "description": "Panorama client identifier as delivered by PEAR; must be treated as text.",
+      "constraints": {
+        "required": true
+      }
+    },
+    {
+      "name": "Suspension Rescind Date",
+      "type": "date",
+      "description": "Source rescind date field from PEAR suspension report (may be blank)."
+    }
+  ]
+}

@@ -1,0 +1,108 @@
+[project]
+name = "ispa-daily-workflow"
+version = "0.1.0"
+description = "WDGPH's daily ISPA compliance workflow using Panorama and PEAR sources."
+readme = "README.md"
+license = "MIT"
+requires-python = ">=3.10,<3.14"
+dependencies = [
+    "azure-identity>=1.25.3",
+    "azure-storage-file-datalake>=12.25.0",
+    "frictionless>=5.19.0",
+    "openpyxl>=3.1.2",
+    "polars[calamine,deltalake]>=1.43.1",
+    "pyyaml>=6.0.3",
+    "xlsxwriter>=3.2.0",
+    "xlrd>=2.0.1",
+    "msgraph-sdk>=1.60.0",
+    "tqdm>=4.70.0",
+]
+
+[project.scripts]
+update-state = "ispa_daily_workflow.pipeline.update_state:main"
+deliver-outputs = "ispa_daily_workflow.pipeline.deliver_outputs:main"
+intake-pear = "ispa_daily_workflow.pipeline.intake_pear:main"
+derive-pear-state = "ispa_daily_workflow.pipeline.derive_pear_state:main"
+extract-inputs = "ispa_daily_workflow.commands.extract_inputs:main"
+diff-lists = "ispa_daily_workflow.commands.diff_lists:main"
+build-reports = "ispa_daily_workflow.commands.build_reports:main"
+rebuild-outputs = "ispa_daily_workflow.commands.rebuild_outputs:main"
+run-daily = "ispa_daily_workflow.commands.run_daily:main"
+local-acceptance = "ispa_daily_workflow.commands.local_acceptance:main"
+generate-validation-rules = "ispa_daily_workflow.commands.generate_validation_rules:main"
+inspect-datafiles = "ispa_daily_workflow.commands.inspect_datafiles:main"
+make-workdays = "ispa_daily_workflow.commands.make_workdays:main"
+patch-pear-cutover-suspension = "ispa_daily_workflow.pipeline.ops.patch_pear_cutover_suspension:main"
+validate-pear-landing = "ispa_daily_workflow.commands.ops.validate_pear_landing:main"
+validate-pear-transforms = "ispa_daily_workflow.commands.ops.validate_pear_transforms:main"
+
+[tool.uv]
+package = true
+
+[build-system]
+requires = ["setuptools>=83.0.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[dependency-groups]
+dev = [
+    "prek>=0.4.11",
+    "pytest>=9.1.1",
+    "pytest-cov>=7.1.0",
+    "ruff>=0.16.0",
+    "ty>=0.0.65",
+]
+
+[tool.ruff.lint]
+ignore = [
+    "LOG015", # Root logging is the established CLI logging contract.
+    "TRY004", # Configuration shape errors intentionally use ValueError.
+    "DTZ005", # Run dates and artifact names intentionally use local wall time.
+    "DTZ007", # These parsers intentionally convert date-only or time-only values.
+    "DTZ011", # Operational defaults intentionally use the local calendar date.
+]
+
+[tool.ruff.lint.per-file-ignores]
+"src/ispa_daily_workflow/logging/setup.py" = ["DTZ001"]
+"src/ispa_daily_workflow/pipeline/daily_extract.py" = ["DTZ001"]
+"src/ispa_daily_workflow/io/sharepoint_session.py" = ["PYI034"]
+"tests/test_pear_canonical_landing.py" = ["DTZ001"]
+"src/ispa_daily_workflow/domain/pear/state/derive.py" = ["E402"]
+"src/ispa_daily_workflow/pipeline/derive_pear_state.py" = ["E402"]
+"src/ispa_daily_workflow/pipeline/intake_pear.py" = ["E402"]
+"src/ispa_daily_workflow/pipeline/ops/*.py" = ["E402"]
+"src/ispa_daily_workflow/pipeline/update_state.py" = ["E402"]
+
+[tool.pytest.ini_options]
+minversion = "9.0"
+testpaths = ["tests"]
+pythonpath = ["src"]
+addopts = [
+    "-ra",
+    "--strict-config",
+    "--strict-markers",
+]
+markers = [
+    "e2e: end-to-end or command-surface tests that exercise multiple pipeline layers",
+    "local_data: requires private/local runtime data and is skipped unless explicitly enabled",
+    "sharepoint_safe: verifies no-upload or dry-run behavior for operator acceptance checks",
+    "validation: validation, schema, guardrail, or evidence behavior",
+]
+
+[tool.coverage.run]
+branch = true
+source = ["ispa_daily_workflow"]
+
+[tool.coverage.report]
+show_missing = true
+skip_empty = true
+exclude_lines = [
+    "pragma: no cover",
+    "if TYPE_CHECKING:",
+    "if __name__ == .__main__.:",
+]
+
+[tool.setuptools]
+package-dir = {"" = "src"}
+
+[tool.setuptools.packages.find]
+where = ["src"]

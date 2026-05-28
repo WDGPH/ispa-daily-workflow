@@ -1,0 +1,82 @@
+{
+  "$schema": "https://datapackage.org/profiles/2.0/tableschema.json",
+  "name": "processed_pear_suspension_vs_overdue",
+  "title": "PEAR Suspension vs Overdue (Processed)",
+  "description": "Normalized PEAR suspension-vs-overdue rows with derived action requirements.",
+  "missingValues": [
+    ""
+  ],
+  "primaryKey": [
+    "client_id"
+  ],
+  "fields": [
+    {
+      "name": "client_id",
+      "type": "string",
+      "description": "Canonical 10-digit client identifier preserved as text.",
+      "constraints": {
+        "required": true
+      }
+    },
+    {
+      "name": "school_id",
+      "type": "string",
+      "description": "Canonical school identifier extracted from school_name and resolved via reference.",
+      "constraints": {
+        "required": true
+      }
+    },
+    {
+      "name": "school_name",
+      "type": "string",
+      "description": "Canonical school name from school reference mapping.",
+      "constraints": {
+        "required": true
+      }
+    },
+    {
+      "name": "first_name",
+      "type": "string",
+      "description": "Normalized student first name.",
+      "constraints": {
+        "required": true
+      }
+    },
+    {
+      "name": "last_name",
+      "type": "string",
+      "description": "Normalized student last name.",
+      "constraints": {
+        "required": true
+      }
+    },
+    {
+      "name": "date_of_birth",
+      "type": "date",
+      "description": "Normalized student date of birth.",
+      "constraints": {
+        "required": true
+      }
+    },
+    {
+      "name": "action_required",
+      "type": "string",
+      "description": "Derived required action for suspension maintenance (`delete` or `rescind`).",
+      "constraints": {
+        "required": true,
+        "enum": [
+          "delete",
+          "rescind"
+        ]
+      }
+    },
+    {
+      "name": "action_date",
+      "type": "date",
+      "description": "Derived action date used when action_required is populated.",
+      "constraints": {
+        "required": true
+      }
+    }
+  ]
+}

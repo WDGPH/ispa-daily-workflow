@@ -1,0 +1,74 @@
+{
+  "$schema": "https://datapackage.org/profiles/2.0/tableschema.json",
+  "name": "landing_pear_suspension_vs_overdue",
+  "title": "PEAR Suspension vs Overdue (Landing)",
+  "description": "PEAR suspension-vs-overdue comparison rows after top-matter/header detection and footer trimming.",
+  "missingValues": [
+    ""
+  ],
+  "fields": [
+    {
+      "name": "School Name",
+      "type": "string",
+      "description": "School label from PEAR, expected to contain canonical school ID suffix.",
+      "constraints": {
+        "required": true
+      }
+    },
+    {
+      "name": "Last Name",
+      "type": "string",
+      "description": "Student last name from PEAR suspension-vs-overdue row.",
+      "constraints": {
+        "required": true
+      }
+    },
+    {
+      "name": "First Name",
+      "type": "string",
+      "description": "Student first name from PEAR suspension-vs-overdue row.",
+      "constraints": {
+        "required": true
+      }
+    },
+    {
+      "name": "Date of Birth",
+      "type": "date",
+      "description": "Student date of birth parsed from PEAR date cell.",
+      "constraints": {
+        "required": true
+      }
+    },
+    {
+      "name": "ClientID",
+      "type": "string",
+      "description": "Panorama client identifier from PEAR; must be handled as 10-digit text.",
+      "constraints": {
+        "required": true
+      }
+    },
+    {
+      "name": "Suspension Effective From",
+      "type": "string",
+      "description": "Source suspension effective date field from PEAR report.",
+      "constraints": {
+        "required": true
+      }
+    },
+    {
+      "name": "Suspension Delete Reason",
+      "type": "string",
+      "description": "Source deletion reason field from PEAR; non-authoritative and often blank."
+    },
+    {
+      "name": "Suspension Rescind Date",
+      "type": "date",
+      "description": "Source rescind date field from PEAR; non-authoritative and often blank."
+    },
+    {
+      "name": "Overdue Student",
+      "type": "string",
+      "description": "Source overdue indicator text from PEAR used for QA context."
+    }
+  ]
+}
