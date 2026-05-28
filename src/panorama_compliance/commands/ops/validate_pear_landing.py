@@ -2,21 +2,16 @@
 from __future__ import annotations
 
 import argparse
-import sys
 from pathlib import Path
 
-PROJECT_ROOT = Path(__file__).resolve().parents[2]
-SRC_ROOT = PROJECT_ROOT / "src"
-SCRIPT_ROOT = Path(__file__).resolve().parent
-sys.path.insert(0, str(SRC_ROOT))
-sys.path.insert(0, str(SCRIPT_ROOT))
-
-from panorama_compliance.schema import ValidationError
 from panorama_compliance.domain.pear.intake import (
     discover_input_files,
     extract_landing_report,
     validate_landing_schema,
 )
+from panorama_compliance.schema import ValidationError
+
+PROJECT_ROOT = Path(__file__).resolve().parents[4]
 
 
 def _parse_args(argv: list[str] | None = None) -> argparse.Namespace:

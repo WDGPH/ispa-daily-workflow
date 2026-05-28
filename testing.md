@@ -10,7 +10,7 @@ Run from the repo root with the repo-local environment:
 
 ```bash
 uv sync
-uv run python -m compileall src scripts
+uv run python -m compileall src
 uv run pytest
 ```
 
@@ -31,7 +31,7 @@ not as a gate to maximize.
 
 ## SharePoint-Safe Acceptance
 
-Use `scripts/local_acceptance.py` for the pre-merge operator check. It has two
+Use `local-acceptance` for the pre-merge operator check. It has two
 safety rules baked in:
 
 - `update-state` checks are `--dry-run` only.
@@ -41,7 +41,7 @@ This command runs compile, pytest, update-state dry-runs for both sources, and
 local cached delivery checks for the default output matrix:
 
 ```bash
-uv run scripts/local_acceptance.py \
+uv run local-acceptance \
   --run-date YYYYMMDD \
   --with-local-delivery \
   --scope-dimension wave \
@@ -51,7 +51,7 @@ uv run scripts/local_acceptance.py \
 Add coverage when useful:
 
 ```bash
-uv run scripts/local_acceptance.py \
+uv run local-acceptance \
   --run-date YYYYMMDD \
   --coverage \
   --with-local-delivery
@@ -60,7 +60,7 @@ uv run scripts/local_acceptance.py \
 If local cached state is incomplete, first run the command plan only:
 
 ```bash
-uv run scripts/local_acceptance.py \
+uv run local-acceptance \
   --run-date YYYYMMDD \
   --with-local-delivery \
   --dry-run
@@ -69,7 +69,7 @@ uv run scripts/local_acceptance.py \
 To target one delivery check:
 
 ```bash
-uv run scripts/local_acceptance.py \
+uv run local-acceptance \
   --run-date YYYYMMDD \
   --with-local-delivery \
   --delivery pear:sharepoint.suspension.pdf \
@@ -97,7 +97,7 @@ Use the profiler to inspect real local data shapes without emitting cell values
 by default:
 
 ```bash
-uv run scripts/inspect_datafiles.py \
+uv run inspect-datafiles \
   input output/pear_processed output/compliance_history \
   --recursive \
   --output artifacts/data_profiles/YYYYMMDD_profile.json
@@ -106,7 +106,7 @@ uv run scripts/inspect_datafiles.py \
 Markdown output is useful for review:
 
 ```bash
-uv run scripts/inspect_datafiles.py output/pear_processed \
+uv run inspect-datafiles output/pear_processed \
   --recursive \
   --format markdown \
   --output artifacts/data_profiles/YYYYMMDD_pear_processed.md

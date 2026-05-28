@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import argparse
+import os
 import shlex
 import subprocess
 import sys
@@ -9,7 +10,7 @@ from dataclasses import dataclass
 from pathlib import Path
 
 
-PROJECT_ROOT = Path(__file__).resolve().parents[1]
+PROJECT_ROOT = Path(__file__).resolve().parents[3]
 
 SOURCE_CHOICES = ("panorama", "pear")
 OUTPUT_SOURCE_DEFAULTS = {
@@ -130,7 +131,7 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
     parser.add_argument(
         "--skip-compile",
         action="store_true",
-        help="Skip python -m compileall src scripts.",
+        help="Skip python -m compileall src.",
     )
     parser.add_argument(
         "--skip-pytest",
@@ -178,7 +179,7 @@ def build_command_plan(
         plans.append(
             CommandPlan(
                 label="compile",
-                command=[python, "-m", "compileall", "src", "scripts"],
+                command=[python, "-m", "compileall", "src"],
             )
         )
 
@@ -200,7 +201,8 @@ def build_command_plan(
         for source in args.update_source or list(SOURCE_CHOICES):
             command = [
                 python,
-                str(project_root / "scripts" / "update_state.py"),
+                "-m",
+                "panorama_compliance.pipeline.update_state",
                 "--source",
                 source,
                 "--run-date",
@@ -223,7 +225,8 @@ def build_command_plan(
         for source, output_id in deliveries:
             command = [
                 python,
-                str(project_root / "scripts" / "deliver_outputs.py"),
+                "-m",
+                "panorama_compliance.pipeline.deliver_outputs",
                 output_id,
                 "--source",
                 source,
@@ -252,21 +255,35 @@ def build_command_plan(
 
 def _validate_sharepoint_safety(plan: CommandPlan) -> None:
     command_names = {Path(part).name for part in plan.command}
-    if "deliver_outputs.py" in command_names:
+    is_delivery_command = (
+        "deliver-outputs" in command_names
+        or "panorama_compliance.pipeline.deliver_outputs" in plan.command
+    )
+    if is_delivery_command:
         if "--no-upload" not in plan.command or "--no-download" not in plan.command:
             raise ValueError(
                 f"unsafe delivery command missing no-upload/no-download: {plan.label}"
             )
         if "--upload" in plan.command or "--download" in plan.command:
             raise ValueError(f"unsafe delivery command enables IO: {plan.label}")
-    if "update_state.py" in command_names and "--dry-run" not in plan.command:
+    is_update_command = (
+        "update-state" in command_names
+        or "panorama_compliance.pipeline.update_state" in plan.command
+    )
+    if is_update_command and "--dry-run" not in plan.command:
         raise ValueError(f"unsafe update-state command missing --dry-run: {plan.label}")
 
 
 def _run_command(plan: CommandPlan, *, cwd: Path) -> int:
     print(f"\n== {plan.label} ==")
     print(shlex.join(plan.command), flush=True)
-    completed = subprocess.run(plan.command, cwd=cwd, check=False)
+    env = os.environ.copy()
+    src_path = str(cwd / "src")
+    pythonpath = env.get("PYTHONPATH")
+    env["PYTHONPATH"] = (
+        src_path if not pythonpath else os.pathsep.join([src_path, pythonpath])
+    )
+    completed = subprocess.run(plan.command, cwd=cwd, env=env, check=False)
     return int(completed.returncode)
 
 

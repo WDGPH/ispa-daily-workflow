@@ -21,6 +21,20 @@ dependencies = [
 [project.scripts]
 update-state = "panorama_compliance.pipeline.update_state:main"
 deliver-outputs = "panorama_compliance.pipeline.deliver_outputs:main"
+intake-pear = "panorama_compliance.pipeline.intake_pear:main"
+derive-pear-state = "panorama_compliance.pipeline.derive_pear_state:main"
+extract-inputs = "panorama_compliance.commands.extract_inputs:main"
+diff-lists = "panorama_compliance.commands.diff_lists:main"
+build-reports = "panorama_compliance.commands.build_reports:main"
+rebuild-outputs = "panorama_compliance.commands.rebuild_outputs:main"
+run-daily = "panorama_compliance.commands.run_daily:main"
+local-acceptance = "panorama_compliance.commands.local_acceptance:main"
+generate-validation-rules = "panorama_compliance.commands.generate_validation_rules:main"
+inspect-datafiles = "panorama_compliance.commands.inspect_datafiles:main"
+make-workdays = "panorama_compliance.commands.make_workdays:main"
+patch-pear-cutover-suspension = "panorama_compliance.pipeline.ops.patch_pear_cutover_suspension:main"
+validate-pear-landing = "panorama_compliance.commands.ops.validate_pear_landing:main"
+validate-pear-transforms = "panorama_compliance.commands.ops.validate_pear_transforms:main"
 
 [tool.uv]
 package = true
@@ -39,8 +53,6 @@ dev = [
 ]
 
 [tool.ruff.lint.per-file-ignores]
-"scripts/**/*.py" = ["E402"]
-"scripts/*.py" = ["E402"]
 "src/panorama_compliance/domain/pear/state/derive.py" = ["E402"]
 "src/panorama_compliance/pipeline/derive_pear_state.py" = ["E402"]
 "src/panorama_compliance/pipeline/intake_pear.py" = ["E402"]

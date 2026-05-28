@@ -3,14 +3,9 @@ from __future__ import annotations
 
 import argparse
 import subprocess
-import sys
 from datetime import date, datetime, timedelta
 from pathlib import Path
 from typing import Iterable
-
-PROJECT_ROOT = Path(__file__).resolve().parents[1]
-SRC_ROOT = PROJECT_ROOT / "src"
-sys.path.insert(0, str(SRC_ROOT))
 
 from panorama_compliance.domain.common.workdays import WorkdayInfo
 from panorama_compliance.io.workdays import load_workdays
@@ -21,6 +16,8 @@ from panorama_compliance.validation.scope import (
     normalize_school_scope_value,
     normalize_wave_scope_value,
 )
+
+PROJECT_ROOT = Path(__file__).resolve().parents[3]
 
 PANORAMA_ONLY_OUTPUT_IDS = {
     "sharepoint.panorama.diff.xlsx",
@@ -312,7 +309,7 @@ def main(argv: list[str] | None = None) -> int:
             update_cmd = [
                 "uv",
                 "run",
-                "scripts/update_state.py",
+                "update-state",
                 "--source",
                 str(args.source),
                 "--run-date",
@@ -339,7 +336,7 @@ def main(argv: list[str] | None = None) -> int:
             deliver_cmd = [
                 "uv",
                 "run",
-                "scripts/deliver_outputs.py",
+                "deliver-outputs",
                 output_id,
                 "--source",
                 str(args.source),

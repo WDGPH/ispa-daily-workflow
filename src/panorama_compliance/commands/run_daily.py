@@ -3,13 +3,8 @@ from __future__ import annotations
 
 import argparse
 import logging
-import sys
 from pathlib import Path
 from typing import TypedDict
-
-PROJECT_ROOT = Path(__file__).resolve().parents[1]
-SRC_ROOT = PROJECT_ROOT / "src"
-sys.path.insert(0, str(SRC_ROOT))
 
 from panorama_compliance.config import ensure_dir
 from panorama_compliance.io.adls import load_adls_settings
@@ -19,6 +14,8 @@ from panorama_compliance.logging import setup_logging
 from panorama_compliance.pipeline import RunDayOptions, run_day
 from panorama_compliance.pipeline.workflow_config import load_workflow_config
 from panorama_compliance.reference import load_school_reference
+
+PROJECT_ROOT = Path(__file__).resolve().parents[3]
 
 DERIVE_CHOICES = (
     "diff",

@@ -131,7 +131,9 @@ class TestUpdateStatePearSync(unittest.TestCase):
         )
 
         self.assertEqual(command[0], sys.executable)
-        self.assertIn("scripts/derive_pear_state.py", command[1])
+        self.assertEqual(
+            command[1:3], ["-m", "panorama_compliance.pipeline.derive_pear_state"]
+        )
         self.assertIn("--run-date", command)
         self.assertIn("20260224", command)
         self.assertIn("--processed-dir", command)

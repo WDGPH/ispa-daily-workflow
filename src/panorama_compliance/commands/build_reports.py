@@ -2,15 +2,10 @@
 from __future__ import annotations
 
 import argparse
-import sys
 from datetime import datetime
 from pathlib import Path
 
 import polars as pl
-
-PROJECT_ROOT = Path(__file__).resolve().parents[1]
-SRC_ROOT = PROJECT_ROOT / "src"
-sys.path.insert(0, str(SRC_ROOT))
 
 from panorama_compliance.compliance_history import (
     discover_latest_compliance_history_by_slice,
@@ -25,12 +20,13 @@ from panorama_compliance.reports.service import (
     cleanup_report_artifacts,
     render_report_outputs,
 )
+from panorama_compliance.schema import resolve_dataset_schema
 from panorama_compliance.validation import (
     ensure_school_label_column,
     require_previous_business_day,
 )
-from panorama_compliance.schema import resolve_dataset_schema
 
+PROJECT_ROOT = Path(__file__).resolve().parents[3]
 DEFAULT_LOGO_PATH = Path("assets/logo.pdf")
 DEFAULT_REFERENCE_PATH = Path("school_reference.json")
 DEFAULT_COMBINED_DIR = Path("output/combined")

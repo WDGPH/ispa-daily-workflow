@@ -2,14 +2,9 @@
 from __future__ import annotations
 
 import argparse
-import sys
 from pathlib import Path
 
 import polars as pl
-
-PROJECT_ROOT = Path(__file__).resolve().parents[1]
-SRC_ROOT = PROJECT_ROOT / "src"
-sys.path.insert(0, str(SRC_ROOT))
 
 from panorama_compliance.compliance_history import (
     discover_compliance_history_by_slice_for_date,
@@ -34,6 +29,8 @@ from panorama_compliance.validation import (
     all_rule_ids,
 )
 from panorama_compliance.validation.scope import normalize_school_id_filter_values
+
+PROJECT_ROOT = Path(__file__).resolve().parents[3]
 
 
 def _resolve_sharepoint_diff_output(path: Path) -> Path:

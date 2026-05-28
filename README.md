@@ -101,10 +101,10 @@ uv run deliver-outputs sharepoint.suspension.pdf --source pear --run-date YYYYMM
 Rebuild a date range when operational recovery requires it:
 
 ```bash
-uv run scripts/rebuild_outputs.py --start-date YYYYMMDD --end-date YYYYMMDD
+uv run rebuild-outputs --start-date YYYYMMDD --end-date YYYYMMDD
 ```
 
-If `--deliver` is provided without a scope flag, `rebuild_outputs.py` defaults
+If `--deliver` is provided without a scope flag, `rebuild-outputs` defaults
 delivery scope to `--wave ALL`.
 
 ## Guardrails
@@ -202,7 +202,7 @@ When validation policy changes, update
 `validation-rules.md`:
 
 ```bash
-uv run scripts/generate_validation_rules.py
+uv run generate-validation-rules
 ```
 
 ## Configuration
@@ -272,7 +272,7 @@ Use the repo-local `uv` environment:
 
 ```bash
 uv run pytest
-uv run scripts/local_acceptance.py --run-date YYYYMMDD --with-local-delivery
+uv run local-acceptance --run-date YYYYMMDD --with-local-delivery
 uv run prek run --all-files
 ```
 
@@ -282,7 +282,7 @@ Install the `prek` commit hook when preparing a development checkout:
 uv run prek install --hook-type pre-commit
 ```
 
-`scripts/local_acceptance.py` keeps production publishing out of the acceptance
+`local-acceptance` keeps production publishing out of the acceptance
 loop: `update-state` runs in dry-run mode and delivery checks use
 `--no-upload --no-download`.
 
@@ -308,7 +308,7 @@ See [testing.md](testing.md) for the full lightweight testing ladder.
 High-level source layout:
 
 - `src/panorama_compliance/`: package code
-- `scripts/`: operational wrappers and helper CLIs
+- `src/panorama_compliance/commands/`: package-owned CLI implementations
 - `schema/`: dataset registry and table schemas
 - `profile.example/`: local profile scaffold
 - `tests/`: unit, integration, and fixture tests

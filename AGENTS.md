@@ -30,7 +30,7 @@ relationships, inspect `src/`, `tests/`, and the focused docs referenced here.
   - `reports/`: report data preparation, Typst source writing, compilation, and cleanup.
   - `templates/`: editable Typst template generators for school-facing PDFs.
   - `reference/`: school-reference loading and scope authority.
-- `scripts/`: operational CLIs and helper scripts.
+- `src/panorama_compliance/commands/`: package-owned secondary CLI implementations.
 - `schema/`: dataset registry and versioned table schemas (`*_v<major>.<minor>.json`).
 - `profile.example/`: scaffold for local/private runtime profile content.
 - `profile/`: local or private profile content; ignored and not part of the public repo.
@@ -64,7 +64,7 @@ uv tool update-shell
 - Prefer profile-submodule wiring in `profile/config.yaml` for org-specific files:
   - `paths.reference: "school_reference.json"`
   - `run.workdays_csv: "workdays.csv"`
-- If `uv` is unavailable, run scripts with a virtualenv that has dependencies from `pyproject.toml` installed.
+- If `uv` is unavailable, run commands with a virtualenv that has dependencies from `pyproject.toml` installed.
 - Use `uv run ...` for repo commands. Direct console scripts are optional and
   depend on a healthy `uv tool` install.
 
@@ -158,25 +158,25 @@ uv run deliver-outputs sharepoint.suspension.pdf --source pear --run-date YYYYMM
 - SharePoint extract (drop folder -> local `input/raw`, optional ADLS landing upload):
 
 ```bash
-uv run scripts/extract_inputs.py --run-date YYYYMMDD
+uv run extract-inputs --run-date YYYYMMDD
 ```
 
 - Daily diff only:
 
 ```bash
-uv run scripts/diff_lists.py daily --previous-file <prev> --current-file <current>
+uv run diff-lists daily --previous-file <prev> --current-file <current>
 ```
 
 - Daily diff upload to SharePoint list-difference destination:
 
 ```bash
-uv run scripts/diff_lists.py daily --previous-file <prev> --current-file <current> --sharepoint-upload
+uv run diff-lists daily --previous-file <prev> --current-file <current> --sharepoint-upload
 ```
 
 - Daily diff from compliance_history:
 
 ```bash
-uv run scripts/diff_lists.py daily \
+uv run diff-lists daily \
   --compliance_history-file output/compliance_history/YYYYMMDD_panorama_<slice>_compliance_history.parquet \
   --previous-date YYYYMMDD \
   --run-date YYYYMMDD
@@ -185,13 +185,13 @@ uv run scripts/diff_lists.py daily \
 - Adhoc diff:
 
 ```bash
-uv run scripts/diff_lists.py adhoc --baseline-file <baseline> --delivery-file <delivery>
+uv run diff-lists adhoc --baseline-file <baseline> --delivery-file <delivery>
 ```
 
 - Adhoc diff from compliance_history:
 
 ```bash
-uv run scripts/diff_lists.py adhoc \
+uv run diff-lists adhoc \
   --compliance_history-file output/compliance_history/YYYYMMDD_panorama_<slice>_compliance_history.parquet \
   --baseline-date YYYYMMDD \
   --delivery-date YYYYMMDD
@@ -200,25 +200,25 @@ uv run scripts/diff_lists.py adhoc \
 - Reports only:
 
 ```bash
-uv run scripts/build_reports.py --run-date YYYYMMDD --report both
+uv run build-reports --run-date YYYYMMDD --report both
 ```
 
 - Reports only (force overdue from combined fallback):
 
 ```bash
-uv run scripts/build_reports.py --run-date YYYYMMDD --report overdue --overdue-source combined
+uv run build-reports --run-date YYYYMMDD --report overdue --overdue-source combined
 ```
 
 - Rebuild range:
 
 ```bash
-uv run scripts/rebuild_outputs.py --start-date YYYYMMDD --end-date YYYYMMDD
+uv run rebuild-outputs --start-date YYYYMMDD --end-date YYYYMMDD
 ```
 
 - Rebuild range + scoped deliveries:
 
 ```bash
-uv run scripts/rebuild_outputs.py \
+uv run rebuild-outputs \
   --start-date YYYYMMDD \
   --end-date YYYYMMDD \
   --deliver sharepoint.panorama.diff.xlsx \
@@ -229,7 +229,7 @@ uv run scripts/rebuild_outputs.py \
 - Delivery-only rebuild pass (skip state update):
 
 ```bash
-uv run scripts/rebuild_outputs.py \
+uv run rebuild-outputs \
   --start-date YYYYMMDD \
   --end-date YYYYMMDD \
   --skip-state-update \
@@ -237,7 +237,7 @@ uv run scripts/rebuild_outputs.py \
   --level SECONDARY
 ```
 
-If `--deliver` is provided without a scope flag, `rebuild_outputs.py`
+If `--deliver` is provided without a scope flag, `rebuild-outputs`
 defaults delivery scope to `--wave ALL`.
 
 - Dry-run scoped delivery validation:
@@ -357,7 +357,7 @@ Automatic retention cleanup in non-dry-run `deliver-outputs`:
 ## Agent Change Checklist
 
 Before finishing work:
-- Run lightweight validation for touched code (at minimum `python -m compileall src scripts` for Python edits).
+- Run lightweight validation for touched code (at minimum `python -m compileall src` for Python edits).
 - Verify outputs/paths for operational script changes.
 - Keep schema and code changes synchronized.
 - Update `README.md` when workflow behavior changes.

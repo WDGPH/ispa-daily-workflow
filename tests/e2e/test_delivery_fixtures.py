@@ -201,7 +201,8 @@ def fixture_runtime(tmp_path: Path) -> Iterator[FixtureRuntime]:
         _run_cli(
             [
                 sys.executable,
-                str(PROJECT_ROOT / "scripts" / "derive_pear_state.py"),
+                "-m",
+                "panorama_compliance.pipeline.derive_pear_state",
                 "--run-date",
                 RUN_DATE,
                 "--config",
@@ -225,7 +226,8 @@ def test_fictional_pear_fixture_delivers_action_queue_locally(
     result = _run_cli(
         [
             sys.executable,
-            str(PROJECT_ROOT / "scripts" / "deliver_outputs.py"),
+            "-m",
+            "panorama_compliance.pipeline.deliver_outputs",
             "sharepoint.action_queue.xlsx",
             "--source",
             "pear",
@@ -266,7 +268,8 @@ def test_fictional_panorama_fixture_delivers_daily_diff_locally(
     result = _run_cli(
         [
             sys.executable,
-            str(PROJECT_ROOT / "scripts" / "deliver_outputs.py"),
+            "-m",
+            "panorama_compliance.pipeline.deliver_outputs",
             "sharepoint.panorama.diff.xlsx",
             "--source",
             "panorama",
@@ -309,7 +312,8 @@ def test_fictional_panorama_fixture_delivers_overdue_pdf_locally(
     result = _run_cli(
         [
             sys.executable,
-            str(PROJECT_ROOT / "scripts" / "deliver_outputs.py"),
+            "-m",
+            "panorama_compliance.pipeline.deliver_outputs",
             "sharepoint.overdue.pdf",
             "--source",
             "panorama",
@@ -352,7 +356,8 @@ def test_fictional_pear_fixture_delivers_suspension_pdf_locally(
     result = _run_cli(
         [
             sys.executable,
-            str(PROJECT_ROOT / "scripts" / "deliver_outputs.py"),
+            "-m",
+            "panorama_compliance.pipeline.deliver_outputs",
             "sharepoint.suspension.pdf",
             "--source",
             "pear",

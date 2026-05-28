@@ -4,7 +4,7 @@ from pathlib import Path
 
 import pytest
 
-from scripts.local_acceptance import build_command_plan, parse_args
+from panorama_compliance.commands.local_acceptance import build_command_plan, parse_args
 
 
 def test_local_delivery_plan_forces_no_upload_no_download() -> None:
@@ -27,7 +27,10 @@ def test_local_delivery_plan_forces_no_upload_no_download() -> None:
 
     assert plans
     for plan in plans:
-        assert Path(plan.command[1]).name == "deliver_outputs.py"
+        assert plan.command[1:3] == [
+            "-m",
+            "panorama_compliance.pipeline.deliver_outputs",
+        ]
         assert "--no-upload" in plan.command
         assert "--no-download" in plan.command
         assert "--upload" not in plan.command

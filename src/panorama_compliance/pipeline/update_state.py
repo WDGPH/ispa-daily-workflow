@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import argparse
 import logging
+import os
 import shlex
 import shutil
 import subprocess
@@ -257,7 +258,8 @@ def _build_pear_intake_command(
 ) -> list[str]:
     command = [
         sys.executable,
-        str(PROJECT_ROOT / "scripts" / "intake_pear.py"),
+        "-m",
+        "panorama_compliance.pipeline.intake_pear",
         "--config",
         str(config_path),
         "--input-dir",
@@ -319,7 +321,8 @@ def _build_pear_state_command(
 ) -> list[str]:
     command = [
         sys.executable,
-        str(PROJECT_ROOT / "scripts" / "derive_pear_state.py"),
+        "-m",
+        "panorama_compliance.pipeline.derive_pear_state",
         "--config",
         str(config_path),
         "--run-date",
@@ -368,11 +371,13 @@ def _run_child_command(*, command: list[str], label: str) -> None:
         label,
         " ".join(shlex.quote(token) for token in command),
     )
-    completed = subprocess.run(
-        command,
-        cwd=PROJECT_ROOT,
-        check=False,
+    env = os.environ.copy()
+    src_path = str(PROJECT_ROOT / "src")
+    pythonpath = env.get("PYTHONPATH")
+    env["PYTHONPATH"] = (
+        src_path if not pythonpath else os.pathsep.join([src_path, pythonpath])
     )
+    completed = subprocess.run(command, cwd=PROJECT_ROOT, env=env, check=False)
     if completed.returncode != 0:
         raise RuntimeError(f"{label} failed with exit code {completed.returncode}")
     logging.debug("Completed %s", label)

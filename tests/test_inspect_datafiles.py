@@ -4,7 +4,10 @@ import json
 
 import openpyxl
 
-from scripts.inspect_datafiles import build_profile, render_markdown
+from panorama_compliance.commands.inspect_datafiles import (
+    build_profile,
+    render_markdown,
+)
 
 
 def test_csv_profile_does_not_emit_cell_values_by_default(tmp_path) -> None:

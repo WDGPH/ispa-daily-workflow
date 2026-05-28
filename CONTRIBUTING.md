@@ -50,10 +50,10 @@ Before opening a pull request:
 - Run:
 
 ```bash
-uv run python -m compileall src scripts
+uv run python -m compileall src
 uv run python -m unittest discover -s tests
-uv run ruff check src tests scripts
-uv run ruff format --check src tests scripts
+uv run ruff check src tests
+uv run ruff format --check src tests
 uv run ty check
 git diff --check
 ```

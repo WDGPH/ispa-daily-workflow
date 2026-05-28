@@ -3,13 +3,8 @@ from __future__ import annotations
 
 import argparse
 import logging
-import sys
 from datetime import datetime
 from pathlib import Path
-
-PROJECT_ROOT = Path(__file__).resolve().parents[1]
-SRC_ROOT = PROJECT_ROOT / "src"
-sys.path.insert(0, str(SRC_ROOT))
 
 from panorama_compliance.config import ensure_dir
 from panorama_compliance.io.adls import load_adls_settings
@@ -20,6 +15,8 @@ from panorama_compliance.pipeline import extract_stage
 from panorama_compliance.pipeline.workflow_config import load_workflow_config
 from panorama_compliance.quality import write_manifest
 from panorama_compliance.reference import load_school_reference
+
+PROJECT_ROOT = Path(__file__).resolve().parents[3]
 
 
 def _parse_args(argv: list[str] | None = None) -> argparse.Namespace:
