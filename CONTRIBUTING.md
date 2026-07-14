@@ -1,7 +1,9 @@
 # Contributing
 
-`panorama-compliance` is intended for public health units and public-sector
-collaborators adapting ISPA compliance automation to local operations.
+WDGPH shares this ISPA daily workflow as a reference implementation for public
+health units and public-sector collaborators adapting Panorama- and PEAR-backed
+compliance automation to local operations. It reflects WDGPH's environment and
+is not a turnkey, vendor-neutral platform.
 
 ## Collaboration Expectations
 
@@ -24,10 +26,11 @@ collaborators adapting ISPA compliance automation to local operations.
 Start with:
 
 - `README.md` for operator workflows and repository structure.
-- `validation-approach.md` for validation design and enforcement semantics.
 - `validation-rules.md` for direct validation rule lookup.
-- `AGENTS.md` for concise implementation runbooks and current module boundaries.
+- `schema/datasets_v1.0.json` for the maintained source and dataset catalog.
+- `AGENTS.md` for concise implementation rules and current module boundaries.
 - `profile.example/` for the shape of local configuration and deployment data.
+- `testing.md` for the detailed test and acceptance ladder.
 
 Use `uv run ...` for repo commands.
 
@@ -51,9 +54,9 @@ Before opening a pull request:
 
 ```bash
 uv run python -m compileall src
-uv run python -m unittest discover -s tests
 uv run ruff check src tests
 uv run ruff format --check src tests
+uv run pytest
 uv run ty check
 git diff --check
 ```
@@ -74,7 +77,7 @@ PHU-specific adaptations should usually live outside shared code:
 - local runbooks and approval processes,
 - organization-specific branding assets.
 
-Shared code changes are appropriate when they improve the generic ISPA pipeline,
+Shared code changes are appropriate when they improve this reference workflow,
 make validation more rigorous, clarify operator safety, or add a configuration
 point that can be used without exposing local data.
 

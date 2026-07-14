@@ -18,14 +18,14 @@ from panorama_compliance.config import (  # noqa: E402
 
 
 class TestRuntimeValidation(unittest.TestCase):
-    def test_missing_profile_path_includes_submodule_hint(self) -> None:
+    def test_missing_profile_path_includes_profile_setup_hint(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)
             profile_root = root / "profile"
             missing_workdays = profile_root / "workdays.csv"
             with self.assertRaisesRegex(
                 FileNotFoundError,
-                "git submodule update --init --recursive",
+                "Copy profile.example to profile",
             ):
                 validate_required_runtime_files(
                     reference_path=None,
@@ -35,7 +35,7 @@ class TestRuntimeValidation(unittest.TestCase):
                     profile_root=profile_root,
                 )
 
-    def test_missing_non_profile_path_omits_submodule_hint(self) -> None:
+    def test_missing_non_profile_path_omits_profile_setup_hint(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)
             missing_workdays = root / "custom" / "workdays.csv"
@@ -47,9 +47,7 @@ class TestRuntimeValidation(unittest.TestCase):
                     require_workdays=True,
                     profile_root=root / "profile",
                 )
-            self.assertNotIn(
-                "git submodule update --init --recursive", str(context.exception)
-            )
+            self.assertNotIn("Copy profile.example to profile", str(context.exception))
 
     def test_existing_required_files_pass(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:

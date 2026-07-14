@@ -207,8 +207,8 @@ def _missing_file_message(
     message = f"Configured file for {config_key} was not found: {path}"
     if _looks_like_profile_path(path, profile_root):
         message += (
-            ". Path points into profile/. Initialize submodules with "
-            "'git submodule update --init --recursive'."
+            ". Path points into profile/. Copy profile.example to profile and "
+            "replace the demonstration values with reviewed local data."
         )
     return message
 

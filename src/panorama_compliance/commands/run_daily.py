@@ -45,7 +45,7 @@ class _ExecutionPlan(TypedDict):
 def _parse_args(argv: list[str] | None = None) -> argparse.Namespace:
     parser = argparse.ArgumentParser(
         description=(
-            "Run integrated daily panorama-compliance pipeline: "
+            "Run the integrated Panorama- and PEAR-backed ISPA daily workflow: "
             "SharePoint extract -> ADLS download -> compliance_history-driven outputs."
         )
     )

@@ -1,11 +1,23 @@
-# Panorama Compliance
+# WDGPH ISPA Daily Workflow
 
-`panorama-compliance` is an operational pipeline for Immunization of School
-Pupils Act (ISPA) compliance workflows.
+This repository contains the ISPA daily compliance workflow used by
+Wellington-Dufferin-Guelph Public Health (WDGPH). It is shared as a reference
+implementation for transparency, reuse, and adaptation by other public health
+organizations. It reflects WDGPH's source systems, Microsoft cloud environment,
+and operating practices; it is not a turnkey product or a complete statement of
+how every health unit should administer ISPA workflows.
 
-It helps a public health unit collect source files, maintain authoritative
-compliance state, generate school-facing XLSX and PDF outputs, publish those
-outputs to SharePoint, and record validation evidence for review.
+Panorama and PEAR report formats and local operating policies may differ between
+organizations. Local configuration, school reference data, calendars,
+credentials, SharePoint destinations, and approval processes are intentionally
+excluded. Adopters should expect to supply those items and may need to adapt
+source-specific transforms. WDGPH is publishing working source code, but is not
+committing to provide implementation support.
+
+The Python import package `panorama_compliance` and distribution name
+`panorama-compliance` are retained for this release as historical internal
+names. The workflow now supports both Panorama and PEAR; renaming the package
+would disrupt existing automation without improving release readiness.
 
 The system has two main commands:
 
@@ -226,6 +238,8 @@ Minimum configuration areas:
 
 Important conventions:
 
+- Relative paths in `profile/config.yaml` are resolved from the `profile/`
+  directory containing that file.
 - `schema/datasets_v1.0.json` is the dataset registry used by the codebase.
 - `school_reference.json` is the source of truth for valid schools, levels, and
   waves.
