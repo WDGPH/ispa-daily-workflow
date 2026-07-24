@@ -1,7 +1,7 @@
 [project]
 name = "panorama-compliance"
 version = "0.1.0"
-description = "Unified Panorama compliance ingest, diff, reporting, and export pipeline."
+description = "WDGPH's daily ISPA compliance workflow using Panorama and PEAR sources."
 readme = "README.md"
 license = "MIT"
 requires-python = ">=3.10,<3.14"

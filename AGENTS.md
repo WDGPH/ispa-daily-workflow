@@ -1,365 +1,131 @@
 # AGENTS.md
 
-Agent onboarding for `panorama-compliance`. Keep this file short and operational:
-it should state durable repo rules, not duplicate the source tree.
+Operational guidance for coding agents working on the WDGPH ISPA Daily
+Workflow. Keep this file concise; the operator runbook belongs in `README.md`
+and the detailed test ladder belongs in `testing.md`.
 
-## Purpose
+## Purpose and boundary
 
-This repo is the standalone ISPA compliance pipeline for Panorama- and
-PEAR-backed school compliance workflows.
+This repository is the Panorama- and PEAR-backed ISPA compliance workflow used
+by Wellington-Dufferin-Guelph Public Health (WDGPH). It is published as a
+reference implementation, not as a turnkey or vendor-neutral platform.
 
-It updates authoritative source state, derives scoped delivery inputs, generates
-school-facing XLSX/PDF outputs, publishes to SharePoint when requested, and
-records validation, warning, and run evidence for review.
+Preserve the operational behavior WDGPH relies on. Do not rename the historical
+`panorama_compliance` import package, the `panorama-compliance` distribution,
+commands, output IDs, schemas, or compliance-state semantics without an explicit
+requirement and migration plan.
 
-For the operator-facing explanation, start with `README.md`. For codebase
-relationships, inspect `src/`, `tests/`, and the focused docs referenced here.
+## Architecture pointers
 
-## Repo Map
+- `src/panorama_compliance/pipeline/`: state-update and delivery orchestration.
+- `src/panorama_compliance/domain/`: source and delivery business rules.
+- `src/panorama_compliance/io/`: SharePoint, Graph, ADLS, discovery, and readers.
+- `src/panorama_compliance/validation/`, `quality/`, and `schema/`: guardrails,
+  evidence, and dataset contracts.
+- `src/panorama_compliance/reports/` and `templates/`: PDF preparation and Typst
+  generation.
+- `src/panorama_compliance/commands/`: supporting and advanced CLI entry points.
+- `schema/`: dataset registry and versioned schemas.
+- `profile.example/`: public demonstration profile; `profile/` is local-only.
+- `tests/`: unit, integration, command-surface, and synthetic E2E coverage.
 
-- `src/panorama_compliance/`: core package.
-  - `pipeline/`: orchestration for state update, PEAR intake/state, delivery, and daily runs.
-    - `intake_pear.py` is the PEAR intake CLI conductor.
-    - `pear_intake_sources.py`, `pear_intake_outputs.py`, and
-      `pear_intake_rescinds.py` own PEAR intake source download, output
-      planning, and rescind patching boundaries.
-  - `domain/`: business rules for source and delivery domains.
-  - `ingest/`, `compliance_history/`, `pear_state/`: source-state construction and compatibility facades.
-  - `io/`: SharePoint facade plus Graph/path/item helpers, ADLS, file discovery, readers, and workdays.
-  - `validation/`, `quality/`, `schema/`: guardrails, evidence, and dataset contracts.
-  - `reports/`: report data preparation, Typst source writing, compilation, and cleanup.
-  - `templates/`: editable Typst template generators for school-facing PDFs.
-  - `reference/`: school-reference loading and scope authority.
-- `src/panorama_compliance/commands/`: package-owned secondary CLI implementations.
-- `schema/`: dataset registry and versioned table schemas (`*_v<major>.<minor>.json`).
-- `profile.example/`: scaffold for local/private runtime profile content.
-- `profile/`: local or private profile content; ignored and not part of the public repo.
-- `assets/`: shared static assets.
-- `output/`: generated business outputs; do not treat as source code.
-- `artifacts/`: run artifacts, data-quality manifests, parity reports, warnings, and alerts.
+Start operator-facing questions in `README.md`. For architecture, dependency,
+or impact claims, inspect current source and tests instead of relying on stale
+generated summaries.
 
-## Environment
+## Environment and canonical commands
 
 - Python: `>=3.10,<3.14`.
-- Package manager/runtime: `uv`.
-- Setup (recommended):
+- Dependency manager and runtime: `uv`.
+- Default runtime configuration: `profile/config.yaml`.
+- Relative configuration paths resolve from the directory containing the
+  configuration file.
+
+Set up a development checkout with:
 
 ```bash
-uv sync
+uv sync --locked
 cp -R profile.example profile
-uv tool install --force -e .
 ```
 
-- If direct commands (for example `update-state`) are not on PATH, run:
+Use the two primary commands for routine workflow work:
 
 ```bash
-uv tool update-shell
+uv run update-state --help
+uv run deliver-outputs --help
 ```
 
-- Optional org-specific step:
-  - If using a private profile repository, clone or mount it outside the public
-    Git history and expose its files through local `profile/config.yaml`.
-
-- `profile/config.yaml` is local-only and should not be committed.
-- Prefer profile-submodule wiring in `profile/config.yaml` for org-specific files:
-  - `paths.reference: "school_reference.json"`
-  - `run.workdays_csv: "workdays.csv"`
-- If `uv` is unavailable, run commands with a virtualenv that has dependencies from `pyproject.toml` installed.
-- Use `uv run ...` for repo commands. Direct console scripts are optional and
-  depend on a healthy `uv tool` install.
-
-## Secrets Configuration
-
-- ADLS credentials use mounted secret files via:
-  - `io.adls.secrets_path`
-  - `io.adls.secret_files.{tenant_id,client_id,client_secret,storage_account,container}`
-- SharePoint credentials follow the same mounted-secret approach via:
-  - `io.sharepoint.secrets_path`
-  - `io.sharepoint.secret_files.{tenant_id,client_id,client_secret}`
-- SharePoint URLs live under `io.sharepoint.destinations`.
-- ADLS storage roots live under `io.adls.destinations.{landing_prefix,processed_prefix}`.
-- Runtime behavior (state update + scoped delivery) is CLI-owned.
-- Use `profile.example/config.yaml` as the template; keep real values only in local `profile/config.yaml`.
-
-## Core Runbook
-
-- Step 1: Update authoritative state:
+Run the required lightweight checks before finishing:
 
 ```bash
-uv run update-state --source panorama --run-date YYYYMMDD
-uv run update-state --source pear --run-date YYYYMMDD
+uv run python -m compileall src
+uv run ruff check src tests
+uv run ruff format --check src tests
+uv run pytest
+git diff --check
 ```
 
-- State update dry run (no writes/uploads/deletes):
+Use the SharePoint-safe acceptance plan when command behavior is touched:
 
 ```bash
-uv run update-state --source panorama --run-date YYYYMMDD --dry-run
-uv run update-state --source pear --run-date YYYYMMDD --dry-run
+uv run local-acceptance --run-date YYYYMMDD --with-local-delivery --dry-run
 ```
 
-- State update with explicit compliance_history safety overrides:
+See `testing.md` for markers, coverage guidance, production-like PDF checks,
+and the full local acceptance workflow.
 
-```bash
-uv run update-state \
-  --source panorama \
-  --run-date YYYYMMDD \
-  --init-compliance-history \
-  --wave SECONDARY1 \
-  --allow-new-client-ids
-```
+## Privacy and publication safety
 
-State-update behavior is source-specific:
-- `--source panorama` updates the longitudinal `compliance_history` backbone.
-- `--source pear` intakes PEAR reports and derives PEAR state used by
-  PEAR-backed delivery.
+- Use only synthetic or de-identified examples in source, tests, documentation,
+  issues, and pull requests.
+- Never commit client or student records, real case details, private school
+  routing, non-example SharePoint URLs, tenant IDs, credentials, tokens, mounted
+  secret values, logs, journals, generated business outputs, or run artifacts.
+- Keep organization-specific configuration, reference data, workday calendars,
+  branding, destinations, and approval procedures out of tracked `profile/`.
+- Do not inspect raw input files for diagnosis unless the user explicitly asks.
+- Security and privacy concerns must follow `SECURITY.md`; do not put sensitive
+  evidence in a public issue.
 
-If ADLS compliance_history sync is enabled but no prior compliance_history snapshot is available
-(and none exists locally), `update-state` hard-fails on non-initial business days
-to prevent accidental history reset. Bypass only when intentional with
-`--init-compliance-history`.
+## Change rules
 
-Safety rules:
-- `--init-compliance-history` must be combined with `--wave`.
-- `--allow-new-client-ids` must be combined with exactly one of `--wave`, `--level`, or `--school`.
+### Configuration
 
-- Step 2: Deliver one scoped output:
+- Preserve `profile/config.yaml` as the default and the existing resolver.
+- Keep `profile.example/` internally consistent and clearly demonstrative.
+- Do not add a parallel environment-variable or configuration framework without
+  an explicit operational requirement.
 
-```bash
-uv run deliver-outputs <output_id> --source panorama --run-date YYYYMMDD --wave ALL
-uv run deliver-outputs <output_id> --source pear --run-date YYYYMMDD --wave ALL
-```
+### Schemas and datasets
 
-Supported `<output_id>`:
-- `sharepoint.panorama.diff.xlsx`
-- `sharepoint.action_queue.xlsx`
-- `sharepoint.overdue.pdf`
-- `sharepoint.suspension.pdf`
+- The primary join key is string `client_id`.
+- Landing headers are strict; processed outputs use canonical selected fields.
+- Schema versions belong in filenames as `*_v<major>.<minor>.json`.
+- Keep `schema/datasets_v1.0.json`, versioned schema files, code, and tests in
+  sync.
+- Treat `school_reference.json` as the authority for school, wave, and level
+  identifiers and routing metadata.
 
-Delivery implementation note:
-- XLSX outputs are not Typst-backed; start with `pipeline/deliver_outputs.py`,
+### Validation and evidence
+
+- Treat validation changes as operational policy changes. Document the risk,
+  hard-fail versus warning behavior, evidence location, and affected tests.
+- Update `src/panorama_compliance/validation/catalog.py`, then regenerate
+  `validation-rules.md` with `uv run generate-validation-rules`.
+- Preserve full affected `client_id` values and available `source_file` context
+  in human-investigation messages; do not sample IDs in primary messages.
+- Apply age-policy warnings only to unresolved rows where `compliant` is null.
+- Preserve real school labels across full joins when either side has a label.
+
+### Operational outputs
+
+- `compliance_history` remains the source of truth for Panorama list streams.
+- Preserve source-specific behavior: Panorama and PEAR are explicit and are not
+  silently interchangeable.
+- Preserve upload/download defaults, scope requirements, output naming, report
+  content, and SharePoint cleanup safety unless the task explicitly changes the
+  contract.
+- XLSX delivery starts in `pipeline/deliver_outputs.py`,
   `pipeline/deliver_tabular_outputs.py`, and `domain/delivery/`.
-- PDF output routing still starts in delivery code, then report data flows through
-  `reports/` into editable Typst template generators under `templates/`.
-
-Exactly one scope flag is required:
-- `--wave VALUE|ALL`
-- `--level VALUE|ALL`
-- `--school VALUE|ALL`
-
-Example scoped deliveries:
-
-```bash
-uv run deliver-outputs sharepoint.panorama.diff.xlsx --source panorama --run-date YYYYMMDD --wave SECONDARY1
-uv run deliver-outputs sharepoint.action_queue.xlsx --source pear --run-date YYYYMMDD --level SECONDARY
-uv run deliver-outputs sharepoint.overdue.pdf --source panorama --run-date YYYYMMDD --school 1100
-uv run deliver-outputs sharepoint.suspension.pdf --source pear --run-date YYYYMMDD --wave ALL
-```
-
-- SharePoint extract (drop folder -> local `input/raw`, optional ADLS landing upload):
-
-```bash
-uv run extract-inputs --run-date YYYYMMDD
-```
-
-- Daily diff only:
-
-```bash
-uv run diff-lists daily --previous-file <prev> --current-file <current>
-```
-
-- Daily diff upload to SharePoint list-difference destination:
-
-```bash
-uv run diff-lists daily --previous-file <prev> --current-file <current> --sharepoint-upload
-```
-
-- Daily diff from compliance_history:
-
-```bash
-uv run diff-lists daily \
-  --compliance_history-file output/compliance_history/YYYYMMDD_panorama_<slice>_compliance_history.parquet \
-  --previous-date YYYYMMDD \
-  --run-date YYYYMMDD
-```
-
-- Adhoc diff:
-
-```bash
-uv run diff-lists adhoc --baseline-file <baseline> --delivery-file <delivery>
-```
-
-- Adhoc diff from compliance_history:
-
-```bash
-uv run diff-lists adhoc \
-  --compliance_history-file output/compliance_history/YYYYMMDD_panorama_<slice>_compliance_history.parquet \
-  --baseline-date YYYYMMDD \
-  --delivery-date YYYYMMDD
-```
-
-- Reports only:
-
-```bash
-uv run build-reports --run-date YYYYMMDD --report both
-```
-
-- Reports only (force overdue from combined fallback):
-
-```bash
-uv run build-reports --run-date YYYYMMDD --report overdue --overdue-source combined
-```
-
-- Rebuild range:
-
-```bash
-uv run rebuild-outputs --start-date YYYYMMDD --end-date YYYYMMDD
-```
-
-- Rebuild range + scoped deliveries:
-
-```bash
-uv run rebuild-outputs \
-  --start-date YYYYMMDD \
-  --end-date YYYYMMDD \
-  --deliver sharepoint.panorama.diff.xlsx \
-  --deliver sharepoint.action_queue.xlsx \
-  --wave ALL
-```
-
-- Delivery-only rebuild pass (skip state update):
-
-```bash
-uv run rebuild-outputs \
-  --start-date YYYYMMDD \
-  --end-date YYYYMMDD \
-  --skip-state-update \
-  --deliver sharepoint.overdue.pdf \
-  --level SECONDARY
-```
-
-If `--deliver` is provided without a scope flag, `rebuild-outputs`
-defaults delivery scope to `--wave ALL`.
-
-- Dry-run scoped delivery validation:
-
-```bash
-uv run deliver-outputs sharepoint.panorama.diff.xlsx --source panorama --run-date YYYYMMDD --wave ALL --dry-run
-```
-
-- No-upload scoped delivery inspection from authoritative ADLS state:
-
-```bash
-uv run deliver-outputs sharepoint.suspension.pdf --source pear --run-date YYYYMMDD --wave ALL --no-upload
-```
-
-- Fully local cached inspection (no upload + no ADLS download):
-
-```bash
-uv run deliver-outputs sharepoint.suspension.pdf --source pear --run-date YYYYMMDD --wave ALL --no-upload --no-download
-```
-
-- Scoped PDF delivery with SharePoint history cleanup:
-
-```bash
-uv run deliver-outputs sharepoint.suspension.pdf --source pear --run-date YYYYMMDD --wave ALL --cleanup-sharepoint-pdfs
-```
-
-No-upload delivery behavior:
-1. writes scoped outputs under `output/inspect/{run_date}/source={source}/io=u0_d{0|1}/{output_id}/{scope}`,
-2. clears that exact scoped folder before generation to avoid stale inspection files,
-3. skips SharePoint uploads and prints a cleanup command.
-
-SharePoint PDF cleanup behavior:
-1. `--cleanup-sharepoint-pdfs` is valid only for `sharepoint.overdue.pdf` and `sharepoint.suspension.pdf`,
-2. it requires upload mode in execute runs (`--upload`) and is therefore incompatible with `--no-upload` unless using `--dry-run`,
-3. with `--dry-run`, the CLI lists exactly which SharePoint files would be removed,
-4. default logging/summary uses shorter path and folder display; use `--verbose` for full paths/URLs and per-folder cleanup logs.
-
-Delivery IO mode rules:
-1. `--upload` and `--download` are enabled by default.
-2. `--upload` requires `--download`; `--upload --no-download` is invalid.
-3. `--no-upload --download` is the recommended test mode for authoritative input + local-only output.
-4. `--no-upload --no-download` is local cache inspection mode.
-5. With `--source pear`, `--download` re-syncs run-date PEAR processed snapshots from ADLS and re-derives local PEAR state before delivery.
-
-Automatic retention cleanup in non-dry-run `deliver-outputs`:
-1. prune `output/inspect/*` run-date folders older than 14 days,
-2. prune `input/state_sync/*` run-date folders older than 7 days,
-3. prune `artifacts/data_quality/*` run-date files older than 30 days,
-4. preserve `artifacts/runs/*` and `output/compliance_history/*`.
-
-## Contracts And Conventions
-
-- Primary join key is `client_id` (string).
-- Header validation is strict against landing schema (`schema/landing_panorama_compliance_v1.0.json`).
-- ADLS landing downloads ingest only canonical run-date files named
-  `YYYYMMDD_panorama_compliance_*.xlsx`; legacy/non-canonical filenames are ignored.
-- Canonical raw landing files preserve landing-schema headers (for example `Client ID`);
-  processed snake_case headers are for processed outputs, not landing inputs.
-- Processed outputs are schema-selected and minimized per stream.
-- Compliance History is the source of truth for list streams:
-  - combined noncompliant is derived from active compliance_history rows (`compliant` null or > run date),
-  - daily/adhoc became_compliant is derived from compliance_history compliance windows,
-  - overdue report input is derived from active compliance_history rows,
-  - suspension report input uses compliance_history snapshot rows,
-  - new compliance_history snapshots are emitted per slice only when merged compliance_history state changes.
-- Schema versions are encoded in filename (`*_v<major>.<minor>.json`).
-- If two raw files map to the same standardized canonical target, standardization
-  overwrites the target with the later file and emits a warning (run does not hard-fail).
-- Optional school-level SharePoint PDF routing uses `sharepoint_folder` in
-  the active school reference file configured via `paths.reference` (default `school_reference.json`).
-- Expected school reference row fields are `school_name`, `school_id`, `level`, `wave`, `fq_group`
-  with optional `sharepoint_folder`.
-- Identifier source of truth:
-  - wave and level identifiers must match the active school reference file (`paths.reference`, default `school_reference.json`),
-  - treat the reference file as the source of truth for valid `wave` and `level` values,
-  - if identifiers change in the reference file, update strict validators in:
-    - `src/panorama_compliance/ingest/combine.py`,
-    - `src/panorama_compliance/validation/scope.py`,
-    - `src/panorama_compliance/domain/delivery/routing.py`,
-  - `compliance_history` remains wave-sliced regardless of whether run filters use `--wave`, `--level`, or `--school`.
-- Output naming patterns:
-  - `output/combined/{date}_panorama_{slice}_noncompliant.{xlsx|parquet}`
-  - `output/diffs/{current}_{previous}_panorama_{slice}_became_compliant.{xlsx|parquet}`
-  - `output/diffs/{delivery}_{baseline}_panorama_adhoc_became_compliant.{xlsx|parquet}`
-  - `output/compliance_history/{date}_panorama_{slice}_compliance_history.{xlsx|parquet}`
-
-## Data Quality And Evidence
-
-- Run artifacts: `artifacts/runs/{run_id}.json`.
-- Guardrails include:
-  - required-field checks,
-  - duplicate-key checks,
-  - diff subset enforcement (`current_only` protection),
-  - unknown-school protection,
-  - workday calendar integrity.
-- Compliance History-specific controls:
-  - hard-fail on unexpected compliance_history `client_id` additions (unless explicitly bypassed),
-  - warning when daily diff is requested without a previous business day,
-  - hard-fail when compliance_history sync finds no prior snapshot (and none exists locally) on non-initial business days unless explicitly bypassed with `--init-compliance-history`,
-  - one JSON run artifact containing stage outcomes, quality counters, alerts, and output inventory,
-  - concise end-of-run warning/error summary in CLI output,
-  - quiet third-party HTTP request logs by default (enable with `--verbose`),
-  - SharePoint publish path checks + strict Graph error handling.
-
-## Logging Preferences
-
-- Guardrail identity/age messages should include full affected `client_id` values (no sampled IDs in primary message text).
-- ISPA age policy warnings should apply only to unresolved rows (`compliant` is null), not historical rows with a populated `compliant` date.
-- When available, include `source_file` for each affected `client_id`.
-- For affected-ID investigation output, prefer:
-  1. one summary header line,
-  2. one indented `client_id=... source_file=...` line per affected row.
-- Keep critical-message text human-investigation friendly in CLI output (`Critical messages`) and easy to copy/paste.
-- Do not inspect raw input files for diagnosis unless explicitly requested by the user.
-- For school-row delta alerts, preserve real school labels across full joins; avoid `UNKNOWN` when either join side has a label.
-
-## Agent Change Checklist
-
-Before finishing work:
-- Run lightweight validation for touched code (at minimum `python -m compileall src` for Python edits).
-- Verify outputs/paths for operational script changes.
-- Keep schema and code changes synchronized.
-- Update `README.md` when workflow behavior changes.
-- For architecture, dependency, or impact-analysis claims, verify against the
-  current source and tests rather than relying on stale generated summaries.
+- PDF delivery routes through delivery code into `reports/` and `templates/`.
+- Update `README.md` whenever operator-visible workflow behavior changes.

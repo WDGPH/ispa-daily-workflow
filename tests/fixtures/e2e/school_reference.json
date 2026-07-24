@@ -1,0 +1,13 @@
+[
+  {
+    "wave": "ELEMENTARY1",
+    "fq_group": "FICTIONAL GROUP",
+    "school_name": "FICTIONAL ALPHA SCHOOL",
+    "school_id": "1001",
+    "level": "ELEMENTARY",
+    "suspension_applied_date": "2026-02-09",
+    "suspension_window_start": "2026-02-24",
+    "suspension_window_end": "2026-03-24",
+    "sharepoint_folder": "Elementary/Fictional_Group/Fictional_Alpha_School_1001"
+  }
+]

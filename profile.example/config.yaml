@@ -1,22 +1,22 @@
-# Complete example root config wired to a profile submodule.
-# Copy values into repo-root config.yaml and replace placeholders.
+# Demonstration profile configuration. Copy profile.example/ to profile/ and
+# replace all organization-specific values before operational use.
 
 run:
   timezone: "America/Toronto"
-  workdays_csv: "profile/workdays.csv"
+  workdays_csv: "workdays.csv"
   school_year_start_month: 9
 
 paths:
-  input_root: "input"
-  input_raw: "input/raw"
-  input_renamed: "input/renamed"
-  output_root: "output"
-  artifacts_root: "artifacts"
-  logs_root: "logs"
-  reference: "profile/school_reference.json"
+  input_root: "../input"
+  input_raw: "../input/raw"
+  input_renamed: "../input/renamed"
+  output_root: "../output"
+  artifacts_root: "../artifacts"
+  logs_root: "../logs"
+  reference: "school_reference.json"
 
 validation:
-  schemas: "schema"
+  schemas: "../schema"
   strict_headers: true
 
 io:
@@ -38,10 +38,10 @@ io:
       storage_account: "example-adls-storage-account"
       container: "example-adls-container"
     destinations:
-      landing_prefix: "Landing/refactor_panorama_compliance"
-      processed_prefix: "Processed/refactor_panorama_compliance"
-      pear_landing_prefix: "Landing/refactor_pear_compliance"
-      pear_processed_prefix: "Processed/refactor_pear_compliance"
+      landing_prefix: "Landing/ispa_daily_workflow/panorama"
+      processed_prefix: "Processed/ispa_daily_workflow/panorama"
+      pear_landing_prefix: "Landing/ispa_daily_workflow/pear"
+      pear_processed_prefix: "Processed/ispa_daily_workflow/pear"
 
   sharepoint:
     secrets_path: "/mnt/secrets-store/sharepoint"
@@ -63,7 +63,7 @@ io:
 
 outputs:
   pdf:
-    logo: "profile/logo.pdf"
+    logo: "logo.pdf"
     typst_bin: "typst"
 
 alerts:

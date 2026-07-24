@@ -10,6 +10,7 @@ config.yaml
 school_reference.json
 !profile.example/config.yaml
 !profile.example/school_reference.json
+!tests/fixtures/e2e/school_reference.json
 profile/
 input/
 output/
