@@ -10,7 +10,7 @@ permissions:
   contents: read
 
 jobs:
-  test:
+  quality:
     runs-on: ubuntu-latest
     steps:
       - name: Check out repository
@@ -29,11 +29,48 @@ jobs:
       - name: Install dependencies
         run: uv sync --locked
 
+      - name: Compile source
+        run: uv run python -m compileall src
+
       - name: Lint
         run: uv run ruff check src tests
 
       - name: Check formatting
         run: uv run ruff format --check src tests
+
+      - name: Type check
+        run: uv run ty check
+
+      - name: Enforce commit hooks
+        run: uv run prek run --all-files
+
+      - name: Check whitespace
+        run: git diff --check
+
+  test:
+    name: Test (Python ${{ matrix.python-version }})
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ["3.10", "3.11", "3.12", "3.13"]
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v5
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@c771a70e6277c0a99b617c7a806ffedaca235ff9
+        with:
+          enable-cache: true
+          cache-dependency-glob: uv.lock
+
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v6
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - name: Install dependencies
+        run: uv sync --locked --python "${{ matrix.python-version }}"
 
       - name: Run tests
         run: uv run pytest
