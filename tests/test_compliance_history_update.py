@@ -38,13 +38,13 @@ class TestComplianceHistoryUpdate(unittest.TestCase):
             prior_row.update(
                 {
                     "client_id": "0000000001",
-                    "school_id": "914770",
-                    "school_name": "GUELPH COLLEGIATE AND VOCATIONAL INSTITUTE",
+                    "school_id": "000001",
+                    "school_name": "SYNTHETIC SECONDARY SCHOOL",
                     "first_name": "TEST",
                     "last_name": "STUDENT",
                     "date_of_birth": date(2010, 1, 1),
                     "source_file": (
-                        "20260128_panorama_compliance_secondary_914770_2009_and_earlier.xlsx"
+                        "20260128_panorama_compliance_secondary_000001_2009_and_earlier.xlsx"
                     ),
                     "compliant": None,
                 }
@@ -61,13 +61,13 @@ class TestComplianceHistoryUpdate(unittest.TestCase):
             current_row.update(
                 {
                     "client_id": "0000000001",
-                    "school_id": "914770",
-                    "school_name": "GUELPH COLLEGIATE AND VOCATIONAL INSTITUTE",
+                    "school_id": "000001",
+                    "school_name": "SYNTHETIC SECONDARY SCHOOL",
                     "first_name": "TEST",
                     "last_name": "STUDENT",
                     "date_of_birth": date(2010, 1, 1),
                     "source_file": (
-                        "20260217_panorama_compliance_secondary_914770_2009_and_earlier.xlsx"
+                        "20260217_panorama_compliance_secondary_000001_2009_and_earlier.xlsx"
                     ),
                 }
             )
@@ -87,7 +87,7 @@ class TestComplianceHistoryUpdate(unittest.TestCase):
             self.assertEqual(refreshed.height, 1)
             self.assertEqual(
                 refreshed.get_column("source_file").to_list(),
-                ["20260217_panorama_compliance_secondary_914770_2009_and_earlier.xlsx"],
+                ["20260217_panorama_compliance_secondary_000001_2009_and_earlier.xlsx"],
             )
 
 
