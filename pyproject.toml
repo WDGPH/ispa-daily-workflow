@@ -6,16 +6,16 @@ readme = "README.md"
 license = "MIT"
 requires-python = ">=3.10,<3.14"
 dependencies = [
-    "azure-identity>=1.25.1",
-    "azure-storage-file-datalake>=12.23.0",
-    "frictionless>=5.18.1",
+    "azure-identity>=1.25.3",
+    "azure-storage-file-datalake>=12.25.0",
+    "frictionless>=5.19.0",
     "openpyxl>=3.1.2",
-    "polars[calamine,deltalake]>=1.36.1",
+    "polars[calamine,deltalake]>=1.43.1",
     "pyyaml>=6.0.3",
     "xlsxwriter>=3.2.0",
     "xlrd>=2.0.1",
-    "msgraph-sdk>=1.54.0",
-    "tqdm>=4.67.3",
+    "msgraph-sdk>=1.60.0",
+    "tqdm>=4.70.0",
 ]
 
 [project.scripts]
@@ -40,16 +40,16 @@ validate-pear-transforms = "panorama_compliance.commands.ops.validate_pear_trans
 package = true
 
 [build-system]
-requires = ["setuptools>=68", "wheel"]
+requires = ["setuptools>=83.0.0", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [dependency-groups]
 dev = [
-    "prek>=0.3.13",
-    "pytest>=9.0.3",
+    "prek>=0.4.11",
+    "pytest>=9.1.1",
     "pytest-cov>=7.1.0",
-    "ruff>=0.15.12",
-    "ty>=0.0.35",
+    "ruff>=0.16.0",
+    "ty>=0.0.65",
 ]
 
 [tool.ruff.lint.per-file-ignores]
