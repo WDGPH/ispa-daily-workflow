@@ -72,5 +72,10 @@ jobs:
       - name: Install dependencies
         run: uv sync --locked --python "${{ matrix.python-version }}"
 
+      - name: Install Typst
+        uses: typst-community/setup-typst@v5
+        with:
+          typst-version: "0.15.1"
+
       - name: Run tests
         run: uv run pytest

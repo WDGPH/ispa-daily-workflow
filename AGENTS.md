@@ -61,7 +61,9 @@ Run the required lightweight checks before finishing:
 uv run python -m compileall src
 uv run ruff check src tests
 uv run ruff format --check src tests
+uv run ty check
 uv run pytest
+uv run prek run --all-files
 git diff --check
 ```
 

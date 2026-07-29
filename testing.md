@@ -9,9 +9,14 @@ unit-test coverage for every helper.
 Run from the repo root with the repo-local environment:
 
 ```bash
-uv sync
+uv sync --locked
 uv run python -m compileall src
+uv run ruff check src tests
+uv run ruff format --check src tests
+uv run ty check
 uv run pytest
+uv run prek run --all-files
+git diff --check
 ```
 
 For validation-focused work:

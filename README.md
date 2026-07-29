@@ -1,5 +1,8 @@
 # WDGPH ISPA Daily Workflow
 
+[![CI](https://github.com/WDGPH/ISPA-daily-workflow/actions/workflows/ci.yml/badge.svg)](https://github.com/WDGPH/ISPA-daily-workflow/actions/workflows/ci.yml)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+
 This repository contains the ISPA daily compliance workflow used by
 Wellington-Dufferin-Guelph Public Health (WDGPH). It is shared as a reference
 implementation for transparency, reuse, and adaptation by other public health
@@ -58,8 +61,26 @@ cross-source date equality.
 
 ## Before You Run
 
-The following inputs and decisions must exist outside the code:
+The WDGPH deployment uses SharePoint for source and publication IO and Azure
+Data Lake Storage Gen2 (ADLS) for authoritative state. Those are the default
+adapters in `profile.example/config.yaml`, not claims that every adopter must
+use the same storage design. The repository also includes local filesystem
+adapters for development and evaluation; another production backend requires
+adapter implementation and local operational validation.
 
+The following infrastructure, inputs, and decisions must exist outside the
+code:
+
+- For the default state-store adapter, an ADLS storage account and container
+  have been provisioned with reviewed landing and processed prefixes.
+- For the default input and output adapters, a SharePoint site and the
+  configured source and destination folders already exist, and the application
+  identity has only the Microsoft Graph access required for those locations.
+- ADLS and SharePoint credentials are mounted as files outside the repository;
+  `profile/config.yaml` points to those mounts and never contains secret values.
+- Install the [Typst CLI](https://typst.app/open-source/) on every host that
+  compiles PDF outputs, and confirm `typst --version` succeeds. Typst is an
+  external executable and is not installed by `uv sync`.
 - Panorama exports have been placed in the configured SharePoint drop folder
   before `update-state --source panorama` runs.
 - PEAR overdue, suspension, and `suspension_vs_overdue` reports have been
@@ -233,13 +254,19 @@ Minimum configuration areas:
 - `run.*`: timezone, workday calendar, school-year settings
 - `paths.*`: input, output, artifacts, logs, reference data
 - `validation.*`: schemas and header strictness
-- `io.adls.*`: mounted secret files plus landing and processed prefixes
+- `io.input_provider`, `io.state_store`, and `io.output_publisher`: select the
+  default cloud adapters or explicit local filesystem adapters
+- `io.adls.*`: mounted secret files plus landing and processed prefixes when
+  the ADLS state-store adapter is selected
 - `io.sharepoint.*`: mounted secret files plus source and destination folders
+  when SharePoint input or output adapters are selected
 
 Important conventions:
 
 - Relative paths in `profile/config.yaml` are resolved from the `profile/`
   directory containing that file.
+- The WDGPH defaults are SharePoint input, ADLS authoritative state, and
+  SharePoint publication. A local adapter requires a configured `root` path.
 - `schema/datasets_v1.0.json` is the dataset registry used by the codebase.
 - `school_reference.json` is the source of truth for valid schools, levels, and
   waves.
@@ -255,10 +282,20 @@ Important conventions:
 Recommended setup:
 
 ```bash
-uv sync
+uv sync --locked
 cp -R profile.example profile
 uv tool install --force -e .
 ```
+
+`uv sync` installs the Python environment, but it does not install Typst. If
+this host will generate PDFs, install the Typst CLI separately and verify it:
+
+```bash
+typst --version
+```
+
+If the executable is not named `typst` or is not on `PATH`, set
+`outputs.pdf.typst_bin` in `profile/config.yaml` to its reviewed location.
 
 If direct commands are not found in your shell, run:
 
@@ -318,6 +355,8 @@ See [testing.md](testing.md) for the full lightweight testing ladder.
 | Agent and repo conventions | [AGENTS.md](AGENTS.md) |
 | Local profile shape | [profile.example](profile.example/) |
 | Test strategy | [testing.md](testing.md) |
+| Contribution process | [CONTRIBUTING.md](CONTRIBUTING.md) |
+| Community expectations | [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md) |
 
 High-level source layout:
 
@@ -358,6 +397,9 @@ Before publishing, sharing, or opening a pull request:
   `src/panorama_compliance/validation/catalog.py`,
 - regenerate `validation-rules.md` after validation catalog changes,
 - follow the PHU-oriented guidance in [CONTRIBUTING.md](CONTRIBUTING.md).
+
+Participation in this repository is governed by the
+[Code of Conduct](CODE_OF_CONDUCT.md).
 
 ## Related Projects
 

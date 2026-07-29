@@ -5,6 +5,9 @@ health units and public-sector collaborators adapting Panorama- and PEAR-backed
 compliance automation to local operations. It reflects WDGPH's environment and
 is not a turnkey, vendor-neutral platform.
 
+Participation in this repository is governed by the
+[Code of Conduct](CODE_OF_CONDUCT.md).
+
 ## Collaboration Expectations
 
 - Use synthetic or de-identified examples in issues, pull requests, tests, and
@@ -31,6 +34,7 @@ Start with:
 - `AGENTS.md` for concise implementation rules and current module boundaries.
 - `profile.example/` for the shape of local configuration and deployment data.
 - `testing.md` for the detailed test and acceptance ladder.
+- `CODE_OF_CONDUCT.md` for community expectations and conduct reporting.
 
 Use `uv run ...` for repo commands.
 
@@ -47,8 +51,8 @@ Before opening a pull request:
 - Confirm no private files or generated business outputs are tracked:
   `git status --short`.
 - Run a sensitive-content check over tracked files. At minimum, search for local
-  organization names, SharePoint URLs, tenant identifiers, secrets, access tokens, and
-  real client IDs derived from private or generated inputs.
+  organization names, SharePoint URLs, tenant identifiers, secrets, access
+  tokens, and real client IDs derived from private or generated inputs.
 - Run focused tests for the area you touched.
 - Run:
 
@@ -56,8 +60,9 @@ Before opening a pull request:
 uv run python -m compileall src
 uv run ruff check src tests
 uv run ruff format --check src tests
-uv run pytest
 uv run ty check
+uv run pytest
+uv run prek run --all-files
 git diff --check
 ```
 
