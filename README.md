@@ -1,6 +1,7 @@
 # WDGPH ISPA Daily Workflow
 
 [![CI](https://github.com/WDGPH/ISPA-daily-workflow/actions/workflows/ci.yml/badge.svg)](https://github.com/WDGPH/ISPA-daily-workflow/actions/workflows/ci.yml)
+[![Ask DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/WDGPH/ispa-daily-workflow)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
 This repository contains the ISPA daily compliance workflow used by
